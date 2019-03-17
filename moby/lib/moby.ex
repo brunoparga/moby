@@ -1,18 +1,21 @@
 defmodule Moby do
   @moduledoc """
-  Documentation for Moby.
+  Implements a clone of the card game "Love Letter" by Z-Man Games.
   """
 
-  @doc """
-  Hello world.
+  def new_game() do
+    {:ok, pid} = Supervisor.start_child(Moby.Supervisor, [])
+    pid
+  end
 
-  ## Examples
+  def game_state(game_pid) do
+    GenServer.call(game_pid, {:game_state})
+  end
 
-      iex> Moby.hello()
-      :world
-
-  """
-  def hello do
-    :world
+  def make_move(game_pid, move) do
+    # Move must include the card played and any options
+    # (target player and named card for Guard)
+    # (target player for Priest, Baron, Prince and King)
+    GenServer.call(game_pid, {:make_move, move})
   end
 end
