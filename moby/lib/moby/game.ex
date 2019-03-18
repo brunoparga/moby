@@ -5,6 +5,8 @@ defmodule Moby.Game do
 
   defstruct player1: %Moby.Player{},
             player2: %Moby.Player{},
+  alias Moby.Player
+
             deck: [],
             removed_card: nil
 

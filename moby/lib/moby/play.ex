@@ -3,9 +3,12 @@ defmodule Moby.Play do
   Contains functions necessary to operate a Love Letter game.
   """
 
+  alias Moby.{Game, Player}
+
   def new_game do
-    Moby.Game.initialize()
-    |> IO.inspect
+    Game.initialize()
+  end
+
   end
 
   def make_move(game, %{player: :player1, card: card}) do

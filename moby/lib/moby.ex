@@ -12,10 +12,10 @@ defmodule Moby do
     GenServer.call(game_pid, {:game_state})
   end
 
-  def make_move(game_pid, move) do
+  def make_move(game_pid, card) do
     # Move must include the card played and any options
     # (target player and named card for Guard)
     # (target player for Priest, Baron, Prince and King)
-    GenServer.call(game_pid, {:make_move, move})
+    GenServer.call(game_pid, {:make_move, card})
   end
 end
