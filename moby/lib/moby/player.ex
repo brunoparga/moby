@@ -6,17 +6,21 @@ defmodule Moby.Player do
   defstruct name: "", current_cards: [], played_cards: []
   # TODO: include score key in the struct, once many-round play is implemented
 
-  def update_card(player, card) do
+  def play_card(player, played_card) do
     player
-    |> play(card)
-    |> add_discarded(card)
+    |> remove_from_hand(played_card)
+    |> add_to_discarded(played_card)
   end
 
-  defp play(player, card) do
+  def draw_card(player, dealt_card) do
+    Map.put(player, :current_cards, player.current_cards ++ [dealt_card])
+  end
+
+  defp remove_from_hand(player, card) do
     Map.put(player, :current_cards, player.current_cards |> List.delete(card))
   end
 
-  defp add_discarded(player, card) do
+  defp add_to_discarded(player, card) do
     Map.put(player, :played_cards, player.played_cards ++ [card])
   end
 end
