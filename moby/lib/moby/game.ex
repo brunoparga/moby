@@ -25,6 +25,6 @@ defmodule Moby.Game do
   defp shuffle_deck() do
     ~w[princess countess king prince prince handmaid handmaid
        baron baron priest priest guard guard guard guard guard]a
-    |> Enum.shuffle
+    |> Enum.shuffle()
   end
 end
