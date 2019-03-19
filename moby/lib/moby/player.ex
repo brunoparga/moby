@@ -3,7 +3,7 @@ defmodule Moby.Player do
   Represents a Love Letter player.
   """
 
-  defstruct name: "", current_cards: [], played_cards: []
+  defstruct name: "", current_cards: [], played_cards: [], active?: true
   # TODO: include score key in the struct, once many-round play is implemented
 
   def play_card(player, played_card) do
@@ -14,6 +14,10 @@ defmodule Moby.Player do
 
   def draw_card(player, dealt_card) do
     Map.put(player, :current_cards, player.current_cards ++ [dealt_card])
+  end
+
+  def lose(player) do
+    Map.put(player, :active?, false)
   end
 
   defp remove_from_hand(player, card) do
