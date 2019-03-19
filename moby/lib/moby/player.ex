@@ -3,20 +3,44 @@ defmodule Moby.Player do
   Represents a Love Letter player.
   """
 
+  alias Moby.{Game, Victory}
+
   defstruct name: "", current_cards: [], played_cards: [], active?: true
   # TODO: include score key in the struct, once many-round play is implemented
 
-  def play_card(player, played_card) do
+  def execute_move(game, :princess) do
+    update(game, &lose/2)
+  end
+
+  def execute_move(game, played_card) do
+    update(game, &play_card/2, played_card)
+  end
+
+  def next(game = %Game{deck: []}), do: Victory.round_over(game)
+
+  def next(game) do
+    [drawn_card | new_deck] = game.deck
+    update(game, &draw_card/2, drawn_card)
+    |> Map.put(:deck, new_deck)
+  end
+
+  defp update(game, function, args \\ nil) do
+    updated_player = hd(game.players) |> function.(args)
+    new_players = [updated_player] ++ tl(game.players)
+    %Game{game | players: new_players}
+  end
+
+  defp play_card(player, played_card) do
     player
     |> remove_from_hand(played_card)
     |> add_to_discarded(played_card)
   end
 
-  def draw_card(player, dealt_card) do
+  defp draw_card(player, dealt_card) do
     Map.put(player, :current_cards, player.current_cards ++ [dealt_card])
   end
 
-  def lose(player) do
+  defp lose(player, _) do
     Map.put(player, :active?, false)
   end
 
