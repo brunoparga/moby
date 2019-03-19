@@ -6,6 +6,7 @@ defmodule Moby.Game do
   alias Moby.Player
 
   defstruct players: [%Player{}, %Player{}],
+            winner: nil,
             deck: [],
             removed_card: nil,
             dealt_card: nil

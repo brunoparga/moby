@@ -3,7 +3,7 @@ defmodule Moby.Play do
   Contains functions necessary to operate a Love Letter game.
   """
 
-  alias Moby.{Game, Player}
+  alias Moby.{Game, Player, Victory}
 
   def new_game do
     Game.initialize()
@@ -26,6 +26,10 @@ defmodule Moby.Play do
   defp update_order(game) do
     new_order = tl(game.players) ++ [hd(game.players)]
     %Game{game | players: new_order}
+  end
+
+  defp draw_card(game = %Game{deck: []}) do
+    game |> Victory.winner()
   end
 
   defp draw_card(game) do
