@@ -20,8 +20,10 @@ defmodule Moby.Player do
 
   def next(game) do
     [drawn_card | new_deck] = game.deck
+
     update(game, &draw_card/2, drawn_card)
     |> Map.put(:deck, new_deck)
+    |> Moby.Cards.check_countess()
   end
 
   defp update(game, function, args \\ nil) do
