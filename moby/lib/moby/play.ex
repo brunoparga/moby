@@ -6,7 +6,7 @@ defmodule Moby.Play do
   alias Moby.{Game, Player, Victory}
 
   def new_game do
-    Game.initialize()
+    Game.initialize() |> Moby.Cards.check_countess()
   end
 
   def make_move(game, card) do
