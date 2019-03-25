@@ -5,7 +5,7 @@ defmodule Moby.Game do
 
   alias Moby.Player
 
-  defstruct players: [player1: %Player{}, player2: %Player{}],
+  defstruct players: [%Player{}, %Player{}],
             winner: nil,
             deck: [],
             removed_card: nil,
@@ -19,9 +19,7 @@ defmodule Moby.Game do
     [removed, player1_1, player1_2, player2 | deck] = shuffle_deck()
     joe = %Player{name: "Joe", current_cards: [player1_1, player1_2]}
     ann = %Player{name: "Ann", current_cards: [player2]}
-    %__MODULE__{players: [player1: joe, player2: ann],
-                deck: deck,
-                removed_card: removed}
+    %__MODULE__{players: [joe, ann], deck: deck, removed_card: removed}
   end
 
   defp shuffle_deck() do
