@@ -2,6 +2,7 @@ defmodule Moby do
   @moduledoc """
   Implements a clone of the card game "Love Letter" by Z-Man Games.
   """
+  defdelegate test, to: Moby.Test
 
   def new_game() do
     {:ok, pid} = Supervisor.start_child(Moby.Supervisor, [])
