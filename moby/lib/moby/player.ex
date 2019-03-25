@@ -16,6 +16,12 @@ defmodule Moby.Player do
     update(game, &play_card/2, played_card)
   end
 
+  # def execute_move(game, :king, target) do
+  #   update(game, &play_card/2, :king)
+  #   |> remove_own_card()
+  #   |> # ....
+  # end
+
   def next(game = %Game{deck: []}), do: Victory.round_over(game)
 
   def next(game) do
