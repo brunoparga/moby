@@ -17,8 +17,9 @@ defmodule Moby.Player do
   end
 
   def move(game, :king, target) do
+    target_player = find(game, target)
     update_current(game, &play_card/2, :king)
-    |> King.play(target)
+    |> Moby.King.play(target_player)
   end
 
   def next(game = %Game{deck: []}), do: Victory.round_over(game)
@@ -31,16 +32,20 @@ defmodule Moby.Player do
     |> Moby.Countess.check()
   end
 
-  defp update_current(game, function, args \\ nil) do
+  def update_current(game, function, args \\ nil) do
     hd(game.players) |> update(game, function, args)
   end
 
-  defp update(player, game, function, args \\ nil) do
-    new_players = update_players(player, game.players, function, args)
-    %Game{game | players: new_players}
+  defp find(game, player_name) do
+    Enum.find(game.players, fn x -> x.name == player_name end)
   end
 
-  defp update_players(player, players, function, args) do
+  def update(player, game, function, args \\ nil) do
+    players = build_new_players(player, game.players, function, args)
+    %Game{game | players: players}
+  end
+
+  defp build_new_players(player, players, function, args) do
     index = find_index(players, player)
     List.update_at(players, index, fn _ -> function.(player, args) end)
   end
