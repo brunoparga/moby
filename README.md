@@ -1,4 +1,4 @@
-# Moby
+# Moby-Letty
 
 A clone of Z-Man Games' "Love Letter".
 
@@ -17,20 +17,3 @@ Prince), a third and fourth player, and keeping track of Tokens of Affection.
 
 Then a text client will be developed, to allow for easier terminal interaction,
 then a single-page Phoenix app.
-
-## Installation
-
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `moby` to your list of dependencies in `mix.exs`:
-
-```elixir
-def deps do
-  [
-    {:moby, "~> 0.1.0"}
-  ]
-end
-```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/moby](https://hexdocs.pm/moby).
