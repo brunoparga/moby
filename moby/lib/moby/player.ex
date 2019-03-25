@@ -8,19 +8,19 @@ defmodule Moby.Player do
   defstruct name: "", current_cards: [], played_cards: [], active?: true
   # TODO: include score key in the struct, once many-round play is implemented
 
-  def execute_move(game, :princess) do
     update(game, &lose/2)
+  def move(game, :princess) do
   end
 
-  def execute_move(game, played_card) do
     update(game, &play_card/2, played_card)
+  def move(game, played_card) do
   end
 
-  # def execute_move(game, :king, target) do
   #   update(game, &play_card/2, :king)
   #   |> remove_own_card()
   #   |> # ....
   # end
+  def move(game, :king, target) do
 
   def next(game = %Game{deck: []}), do: Victory.round_over(game)
 
@@ -29,7 +29,7 @@ defmodule Moby.Player do
 
     update(game, &draw_card/2, drawn_card)
     |> Map.put(:deck, new_deck)
-    |> Moby.Cards.check_countess()
+    |> Moby.Countess.check()
   end
 
   defp update(game, function, args \\ nil) do

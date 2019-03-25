@@ -6,13 +6,13 @@ defmodule Moby.Play do
   alias Moby.{Game, Player, Victory}
 
   def new_game do
-    Game.initialize() |> Moby.Cards.check_countess()
+    Game.initialize() |> Moby.Countess.check()
   end
 
   def make_move(game, {card, target}) do
     # Assumes the player actually has the given card.
     game
-    |> Player.execute_move(card, target)
+    |> Player.move(card, target)
     |> Victory.check()
     |> is_over()
   end
@@ -20,7 +20,7 @@ defmodule Moby.Play do
   def make_move(game, card) do
     # Assumes the player actually has the given card.
     game
-    |> Player.execute_move(card)
+    |> Player.move(card)
     |> Victory.check()
     |> is_over()
   end
