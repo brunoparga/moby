@@ -38,8 +38,8 @@ defmodule Moby.Player do
     |> add_to_discarded(played_card)
   end
 
-  defp draw_card(player, dealt_card) do
-    Map.put(player, :current_cards, player.current_cards ++ [dealt_card])
+  defp draw_card(player, drawn_card) do
+    Map.put(player, :current_cards, player.current_cards ++ [drawn_card])
   end
 
   defp lose(player, _) do

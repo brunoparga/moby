@@ -17,6 +17,14 @@ defmodule Moby.Play do
     |> is_over()
   end
 
+  # def make_move(game, card, target) do
+  #   # Assumes the player actually has the given card.
+  #   game
+  #   |> Player.execute_move(card, target)
+  #   |> Victory.check()
+  #   |> is_over()
+  # end
+
   defp is_over(game) do
     if game.winner, do: Victory.somebody_won(game), else: continue_game(game)
   end

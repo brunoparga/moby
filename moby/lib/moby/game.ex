@@ -11,8 +11,7 @@ defmodule Moby.Game do
             removed_card: nil,
             exchanged_card: nil
 
-  # TODO: extract out the information about the card of the
-  # opposing player
+  # TODO: extract out the information about the card of the opposing player
   def state(game), do: game
 
   def initialize() do
