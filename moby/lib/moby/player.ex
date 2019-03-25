@@ -8,34 +8,45 @@ defmodule Moby.Player do
   defstruct name: "", current_cards: [], played_cards: [], active?: true
   # TODO: include score key in the struct, once many-round play is implemented
 
-    update(game, &lose/2)
   def move(game, :princess) do
+    update_current(game, &lose/2)
   end
 
-    update(game, &play_card/2, played_card)
   def move(game, played_card) do
+    update_current(game, &play_card/2, played_card)
   end
 
-  #   update(game, &play_card/2, :king)
-  #   |> remove_own_card()
-  #   |> # ....
-  # end
   def move(game, :king, target) do
+    update_current(game, &play_card/2, :king)
+    |> King.play(target)
+  end
 
   def next(game = %Game{deck: []}), do: Victory.round_over(game)
 
   def next(game) do
     [drawn_card | new_deck] = game.deck
 
-    update(game, &draw_card/2, drawn_card)
+    update_current(game, &draw_card/2, drawn_card)
     |> Map.put(:deck, new_deck)
     |> Moby.Countess.check()
   end
 
-  defp update(game, function, args \\ nil) do
-    updated_player = hd(game.players) |> function.(args)
-    new_players = [updated_player] ++ tl(game.players)
+  defp update_current(game, function, args \\ nil) do
+    hd(game.players) |> update(game, function, args)
+  end
+
+  defp update(player, game, function, args \\ nil) do
+    new_players = update_players(player, game.players, function, args)
     %Game{game | players: new_players}
+  end
+
+  defp update_players(player, players, function, args) do
+    index = find_index(players, player)
+    List.update_at(players, index, fn _ -> function.(player, args) end)
+  end
+
+  defp find_index(players, player) do
+    Enum.find_index(players, fn x -> x == player end)
   end
 
   defp play_card(player, played_card) do
