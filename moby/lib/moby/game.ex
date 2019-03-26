@@ -5,10 +5,12 @@ defmodule Moby.Game do
 
   alias Moby.Player
 
-  @type t :: %__MODULE__{players: [Player.t],
-                         winner: (nil | Player.t),
-                         deck: [atom],
-                         removed_card: atom}
+  @type t :: %__MODULE__{
+          players: [Player.t()],
+          winner: nil | Player.t(),
+          deck: [atom],
+          removed_card: atom
+        }
   defstruct players: [%Player{}, %Player{}],
             winner: nil,
             deck: [],
