@@ -30,13 +30,13 @@ defmodule Moby.Victory do
     end
   end
 
-  @spec somebody_won(Game.t) :: none
+  @spec somebody_won(Game.t) :: no_return
   def somebody_won(game) do
     IO.puts("#{game.winner.name} won!")
     exit(:normal)
   end
 
-  @spec round_over(Game.t) :: none
+  @spec round_over(Game.t) :: no_return
   def round_over(game) do
     winner =
       game.players
