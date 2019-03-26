@@ -12,8 +12,7 @@ defmodule Moby.Game do
   defstruct players: [%Player{}, %Player{}],
             winner: nil,
             deck: [],
-            removed_card: nil,
-            exchanged_card: nil
+            removed_card: nil
 
   # TODO: extract out the information about the card of the opposing player
   @spec state(t) :: t
