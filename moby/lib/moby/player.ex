@@ -8,6 +8,10 @@ defmodule Moby.Player do
   defstruct name: "", current_cards: [], played_cards: [], active?: true
   # TODO: include score key in the struct, once many-round play is implemented
 
+  @doc """
+  Make the given move: play a card, targetting one player (except for the
+  Princess, Countess and Handmaid) and naming a card (for the Guard).
+  """
   def move(game, :princess) do
     update_current(game, &lose/2)
   end
@@ -22,6 +26,10 @@ defmodule Moby.Player do
     |> Moby.King.play(target_player)
   end
 
+  @doc """
+  If a move does not cause someone to win, see if there are any cards left
+  to draw. If so, set up the next player; otherwise, determine a winner.
+  """
   def next(game = %Game{deck: []}), do: Victory.round_over(game)
 
   def next(game) do
@@ -32,6 +40,9 @@ defmodule Moby.Player do
     |> Moby.Countess.check()
   end
 
+  @doc """
+  Update the current player with the given function.
+  """
   def update_current(game, function, args \\ nil) do
     hd(game.players) |> update(game, function, args)
   end
@@ -40,11 +51,15 @@ defmodule Moby.Player do
     Enum.find(game.players, fn x -> x.name == player_name end)
   end
 
+  @doc """
+  Update a given player with a given function; return a game.
+  """
   def update(player, game, function, args \\ nil) do
     players = build_new_players(player, game.players, function, args)
     %Game{game | players: players}
   end
 
+  # Helper functions for update/4
   defp build_new_players(player, players, function, args) do
     index = find_index(players, player)
     List.update_at(players, index, fn _ -> function.(player, args) end)

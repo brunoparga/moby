@@ -25,7 +25,6 @@ defmodule Moby.Server do
   - {:card_atom, "player name"} for the King, Prince, Baron and Priest
   - {:guard, "player name", :named_card} for the Guard.
   """
-
   def handle_call({:make_move, {:guard, target, named_card}}, _from, game) do
     game = Play.make_move(game, {:guard, target, named_card})
     {:reply, game, game}

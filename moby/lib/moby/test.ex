@@ -1,4 +1,11 @@
 defmodule Moby.Test do
+  @moduledoc """
+  Automate running the game.
+  """
+
+  @doc """
+  Starts a game and keeps prompting the player for a move, which is executed.
+  """
   def test do
     Moby.new_game()
     |> make_move()

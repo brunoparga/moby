@@ -5,10 +5,18 @@ defmodule Moby.Play do
 
   alias Moby.{Game, Player, Victory}
 
-  def new_game do
+  @doc """
+  Sets up the game for the first player to play. If they must play the Countess,
+  they do so and the turn passes to the next player.
+  """
+  def new_game() do
     Game.initialize() |> Moby.Countess.check()
   end
 
+  @doc """
+  Makes a move and continues the game, unless the move caused someone to win the
+  round.
+  """
   def make_move(game, {card, target}) do
     # Assumes the player actually has the given card.
     game

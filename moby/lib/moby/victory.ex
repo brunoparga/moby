@@ -1,4 +1,9 @@
 defmodule Moby.Victory do
+  @moduledoc """
+  Functions related to a player winning a round.
+  TODO: round victory
+  """
+
   @card_values %{
     princess: 8,
     countess: 7,
