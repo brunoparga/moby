@@ -4,6 +4,8 @@ defmodule Moby.Victory do
   TODO: round victory
   """
 
+  alias Moby.{Game, Player}
+
   @card_values %{
     princess: 8,
     countess: 7,
@@ -15,6 +17,7 @@ defmodule Moby.Victory do
     guard: 1
   }
 
+  @spec check(Game.t) :: Game.t
   def check(game) do
     active_players = remove_inactive_players(game)
 
@@ -27,6 +30,13 @@ defmodule Moby.Victory do
     end
   end
 
+  @spec somebody_won(Game.t) :: none
+  def somebody_won(game) do
+    IO.puts("#{game.winner.name} won!")
+    exit(:normal)
+  end
+
+  @spec round_over(Game.t) :: none
   def round_over(game) do
     winner =
       game.players
@@ -38,15 +48,12 @@ defmodule Moby.Victory do
     |> somebody_won()
   end
 
-  def somebody_won(game) do
-    IO.puts("#{game.winner.name} won!")
-    exit(:normal)
-  end
-
-  defp player_score(player = %Moby.Player{current_cards: [card]}) do
+  @spec player_score(Player.t) :: {Player.t, pos_integer}
+  defp player_score(player = %Player{current_cards: [card]}) do
     {player, @card_values[card]}
   end
 
+  @spec remove_inactive_players(Game.t) :: [Player.t]
   defp remove_inactive_players(game) do
     game.players |> Enum.filter(fn player -> player.active? end)
   end

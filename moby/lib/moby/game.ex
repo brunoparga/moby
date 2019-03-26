@@ -5,6 +5,10 @@ defmodule Moby.Game do
 
   alias Moby.Player
 
+  @type t :: %__MODULE__{players: [Player.t],
+                         winner: (nil | Player.t),
+                         deck: [atom],
+                         removed_card: atom}
   defstruct players: [%Player{}, %Player{}],
             winner: nil,
             deck: [],
@@ -12,8 +16,10 @@ defmodule Moby.Game do
             exchanged_card: nil
 
   # TODO: extract out the information about the card of the opposing player
+  @spec state(t) :: t
   def state(game), do: game
 
+  @spec initialize() :: t
   def initialize() do
     [removed, player1_1, player1_2, player2 | deck] = shuffle_deck()
     joe = %Player{name: "Joe", current_cards: [player1_1, player1_2]}
@@ -21,6 +27,7 @@ defmodule Moby.Game do
     %__MODULE__{players: [joe, ann], deck: deck, removed_card: removed}
   end
 
+  @spec shuffle_deck() :: [atom]
   defp shuffle_deck() do
     ~w[princess countess king prince prince handmaid handmaid
        baron baron priest priest guard guard guard guard guard]a
