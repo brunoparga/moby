@@ -62,19 +62,19 @@ defmodule Moby.Player do
   """
   @spec update_current(Game.t(), (__MODULE__.t(), atom -> __MODULE__.t()), nil | atom) :: Game.t()
   def update_current(game, function, args \\ nil) do
-    hd(game.players) |> update(game, function, args)
+     update(game, hd(game.players), function, args)
   end
 
   @doc """
   Update a given player with a given function; return a game.
   """
   @spec update(
-          __MODULE__.t(),
           Game.t(),
+          __MODULE__.t(),
           (__MODULE__.t(), nil | atom -> __MODULE__.t()),
           nil | atom
         ) :: Game.t()
-  def update(player, game, function, args \\ nil) do
+  def update(game, player, function, args \\ nil) do
     players = build_new_players(player, game.players, function, args)
     %Game{game | players: players}
   end
