@@ -31,14 +31,12 @@ defmodule Moby.Player do
 
   @spec move(Game.t(), atom, String.t()) :: Game.t()
   def move(game, :king, target) do
-    target_player = find(game, target)
-
     update_current(game, &play_card/2, :king)
-    |> Moby.King.play(target_player)
+    |> Moby.King.play(target)
   end
 
-  @spec find(Game.t(), String.t()) :: __MODULE__.t()
-  defp find(game, player_name) do
+  @spec find_by_name(Game.t(), String.t()) :: __MODULE__.t()
+  def find_by_name(game, player_name) do
     Enum.find(game.players, fn x -> x.name == player_name end)
   end
 
@@ -62,7 +60,7 @@ defmodule Moby.Player do
   """
   @spec update_current(Game.t(), (__MODULE__.t(), atom -> __MODULE__.t()), nil | atom) :: Game.t()
   def update_current(game, function, args \\ nil) do
-     update(game, hd(game.players), function, args)
+     update(game, hd(game.players).name, function, args)
   end
 
   @doc """
@@ -70,41 +68,39 @@ defmodule Moby.Player do
   """
   @spec update(
           Game.t(),
-          __MODULE__.t(),
+          String.t(),
           (__MODULE__.t(), nil | atom -> __MODULE__.t()),
           nil | atom
         ) :: Game.t()
-  def update(game, player, function, args \\ nil) do
-    players = build_new_players(player, game.players, function, args)
+  def update(game, player_name, function, args \\ nil) do
+    players = build_new_players(player_name, game.players, function, args)
     %Game{game | players: players}
   end
 
   # Helper functions for update/4
   @spec build_new_players(
-          __MODULE__.t(),
+          String.t(),
           [__MODULE__.t()],
           (__MODULE__.t(), nil | atom -> __MODULE__.t()),
           nil | atom
         ) :: [__MODULE__.t()]
-  defp build_new_players(player, players, function, args) do
-    index = find_index(players, player)
-    List.update_at(players, index, fn _ -> function.(player, args) end)
+  defp build_new_players(player_name, players, function, args) do
+    Enum.map(players, fn player ->
+      if player.name == player_name, do: function.(player, args), else: player
+    end)
   end
 
-  @spec find_index([__MODULE__.t()], __MODULE__.t()) :: non_neg_integer() | nil
-  defp find_index(players, player) do
-    Enum.find_index(players, fn x -> x == player end)
-  end
+  # Card-playing actions
 
   @spec play_card(__MODULE__.t(), atom) :: __MODULE__.t()
-  defp play_card(player, played_card) do
+  def play_card(player, played_card) do
     player
     |> remove_from_hand(played_card)
     |> add_to_discarded(played_card)
   end
 
   @spec draw_card(__MODULE__.t(), atom) :: __MODULE__.t()
-  defp draw_card(player, drawn_card) do
+  def draw_card(player, drawn_card) do
     Map.put(player, :current_cards, player.current_cards ++ [drawn_card])
   end
 
