@@ -35,6 +35,12 @@ defmodule Moby.Player do
     |> Moby.King.play(target)
   end
 
+  @spec move(Game.t(), atom, String.t()) :: Game.t()
+  def move(game, :prince, target) do
+    update_current(game, &play_card/2, :prince)
+    |> Moby.Prince.play(target)
+  end
+
   @spec find_by_name(Game.t(), String.t()) :: __MODULE__.t()
   def find_by_name(game, player_name) do
     Enum.find(game.players, fn x -> x.name == player_name end)
