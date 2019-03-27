@@ -21,10 +21,6 @@ defmodule Moby.Player do
   Princess, Countess and Handmaid) and naming a card (for the Guard).
   """
   @spec move(Game.t(), atom) :: Game.t()
-  def move(game, :princess) do
-    update_current(game, &lose/2)
-  end
-
   def move(game, played_card) do
     update_current(game, &play_card/2, played_card)
   end
@@ -35,7 +31,6 @@ defmodule Moby.Player do
     |> Moby.King.play(target)
   end
 
-  @spec move(Game.t(), atom, String.t()) :: Game.t()
   def move(game, :prince, target) do
     update_current(game, &play_card/2, :prince)
     |> Moby.Prince.play(target)
@@ -66,7 +61,7 @@ defmodule Moby.Player do
   """
   @spec update_current(Game.t(), (__MODULE__.t(), atom -> __MODULE__.t()), nil | atom) :: Game.t()
   def update_current(game, function, args \\ nil) do
-     update(game, hd(game.players).name, function, args)
+    update(game, hd(game.players).name, function, args)
   end
 
   @doc """
@@ -99,6 +94,8 @@ defmodule Moby.Player do
   # Card-playing actions
 
   @spec play_card(__MODULE__.t(), atom) :: __MODULE__.t()
+  def play_card(player, :princess), do: lose(player)
+
   def play_card(player, played_card) do
     player
     |> remove_from_hand(played_card)
@@ -110,8 +107,8 @@ defmodule Moby.Player do
     Map.put(player, :current_cards, player.current_cards ++ [drawn_card])
   end
 
-  @spec lose(__MODULE__.t(), nil) :: __MODULE__.t()
-  defp lose(player, _) do
+  @spec lose(__MODULE__.t()) :: __MODULE__.t()
+  defp lose(player) do
     Map.put(player, :active?, false)
   end
 
