@@ -1,4 +1,4 @@
-defmodule Moby.Game do
+defmodule Moby.GameState do
   @moduledoc """
   Represents a Love Letter game.
   """
