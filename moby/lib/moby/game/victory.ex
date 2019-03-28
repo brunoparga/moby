@@ -4,7 +4,7 @@ defmodule Moby.Victory do
   TODO: round victory
   """
 
-  alias Moby.{GameState, Player}
+  alias Moby.{Action, GameState, Player}
 
   @card_values %{
     princess: 8,
@@ -28,6 +28,16 @@ defmodule Moby.Victory do
       _ ->
         game
     end
+  end
+
+  def compare(game, target) do
+    defeated_player =
+      [hd(game.players), target]
+      |> Enum.map(&player_score/1)
+      |> Enum.min_by(fn {_, x} -> x end)
+      |> (fn {player, _score} -> player.name end).()
+
+    Action.execute(game, defeated_player, {Action, :lose, []})
   end
 
   @spec somebody_won(GameState.t()) :: no_return

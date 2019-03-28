@@ -20,6 +20,11 @@ defmodule Moby.Dispatch do
     |> Moby.Prince.play(target)
   end
 
+  def move(game, {:baron, target}) do
+    Action.execute_current(game, {Action, :play_card, [:baron]})
+    |> Moby.Baron.play(target)
+  end
+
   @spec move(GameState.t(), atom) :: GameState.t()
   def move(game, played_card) when is_atom(played_card) do
     Action.execute_current(game, {Action, :play_card, [played_card]})

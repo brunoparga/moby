@@ -53,7 +53,7 @@ defmodule Moby.Action do
   end
 
   @spec lose(Player.t()) :: Player.t()
-  defp lose(player) do
+  def lose(player) do
     Map.put(player, :active?, false)
   end
 
