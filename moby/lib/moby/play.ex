@@ -19,18 +19,10 @@ defmodule Moby.Play do
   round.
   """
   @spec make_move(Game.t(), atom | {atom, String.t()} | {:guard, String.t(), atom}) :: Game.t()
-  def make_move(game, {card, target}) do
+  def make_move(game, move) do
     # Assumes the player actually has the given card.
     game
-    |> Player.move(card, target)
-    |> Victory.check()
-    |> is_over()
-  end
-
-  def make_move(game, card) do
-    # Assumes the player actually has the given card.
-    game
-    |> Player.move(card)
+    |> Player.move(move)
     |> Victory.check()
     |> is_over()
   end

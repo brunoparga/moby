@@ -20,20 +20,20 @@ defmodule Moby.Player do
   Make the given move: play a card, targetting one player (except for the
   Princess, Countess and Handmaid) and naming a card (for the Guard).
   """
-  @spec move(Game.t(), atom) :: Game.t()
-  def move(game, played_card) do
-    update_current(game, &play_card/2, played_card)
-  end
-
-  @spec move(Game.t(), atom, String.t()) :: Game.t()
-  def move(game, :king, target) do
+  @spec move(Game.t(), {atom, String.t()}) :: Game.t()
+  def move(game, {:king, target}) do
     update_current(game, &play_card/2, :king)
     |> Moby.King.play(target)
   end
 
-  def move(game, :prince, target) do
+  def move(game, {:prince, target}) do
     update_current(game, &play_card/2, :prince)
     |> Moby.Prince.play(target)
+  end
+
+  @spec move(Game.t(), atom) :: Game.t()
+  def move(game, played_card) when is_atom(played_card) do
+    update_current(game, &play_card/2, played_card)
   end
 
   @spec find_by_name(Game.t(), String.t()) :: __MODULE__.t()
