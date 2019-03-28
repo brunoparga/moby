@@ -3,7 +3,7 @@ defmodule Moby.GameFlow do
   Contains functions necessary to operate a Love Letter game.
   """
 
-  alias Moby.{Action, GameState, Player, Victory}
+  alias Moby.{Action, GameState, Victory}
 
   @doc """
   Sets up the game for the first player to play. If they must play the Countess,
