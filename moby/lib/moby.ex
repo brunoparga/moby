@@ -27,8 +27,12 @@ defmodule Moby do
   end
 
   @doc """
-  Makes a move and returns the new game state. The caller must properly format
-  the request (see handler for more information).
+  A call to make_move has three possible formats, depending on the card
+  played. The move itself is:
+  - :card_atom in the case of the Princess, Countess and Handmaid, which require
+    no target.
+  - {:card_atom, "target name"} for the King, Prince, Baron and Priest
+  - {:guard, "target name", :named_card} for the Guard.
   """
   @spec make_move(pid, atom | {atom, String.t()} | {:guard, String.t(), atom}) :: Game.t()
   def make_move(game_pid, move) do
