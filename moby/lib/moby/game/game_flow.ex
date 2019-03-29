@@ -23,6 +23,8 @@ defmodule Moby.GameFlow do
   def make_move(game, move) do
     # Assumes the player actually has the given card.
     game
+    |> Moby.Handmaid.end_own_protection()
+    |> Moby.Handmaid.check_protected(move)
     |> Moby.Dispatch.move(move)
     |> Victory.check()
     |> is_over()

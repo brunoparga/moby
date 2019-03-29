@@ -9,14 +9,16 @@ defmodule Moby.GameState do
           players: [Player.t()],
           winner: nil | Player.t(),
           deck: [atom],
-          removed_card: atom
+          removed_card: atom,
+          target_protected: boolean
         }
   # TODO: stick more information inside of here, so that the functions only take
   # a game (magic sausage, pipelines)
   defstruct players: [%Player{}, %Player{}],
             winner: nil,
             deck: [],
-            removed_card: nil
+            removed_card: nil,
+            target_protected: false
 
   # TODO: extract out the information about the card of the opposing player
   @spec state(t) :: t
