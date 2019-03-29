@@ -4,7 +4,7 @@ defmodule Moby.King do
   @spec play(GameState.t(), String.t()) :: GameState.t()
   def play(game, target_player) do
     own_card = hd(hd(game.players).current_cards)
-    player = Player.find_by_name(game, target_player)
+    player = Player.find(game, target_player)
     target_card = hd(player.current_cards)
 
     Action.execute_current(game, {__MODULE__, :replace_card, [target_card]})

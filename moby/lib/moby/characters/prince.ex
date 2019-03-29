@@ -3,7 +3,7 @@ defmodule Moby.Prince do
 
   @spec play(GameState.t(), String.t()) :: GameState.t()
   def play(game, target_player) do
-    player = Moby.Player.find_by_name(game, target_player)
+    player = Moby.Player.find(game, target_player)
     target_card = hd(player.current_cards)
 
     Action.execute(game, target_player, {Action, :play_card, [target_card]})

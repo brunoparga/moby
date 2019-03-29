@@ -16,8 +16,8 @@ defmodule Moby.Player do
   defstruct name: "", current_cards: [], played_cards: [], active?: true
   # TODO: include score key in the struct, once many-round play is implemented
 
-  @spec find_by_name(GameState.t(), String.t()) :: __MODULE__.t()
-  def find_by_name(game, player_name) do
+  @spec find(GameState.t(), String.t()) :: __MODULE__.t()
+  def find(game, player_name) do
     Enum.find(game.players, fn x -> x.name == player_name end)
   end
 end

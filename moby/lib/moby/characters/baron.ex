@@ -3,7 +3,7 @@ defmodule Moby.Baron do
 
   @spec play(GameState.t(), String.t()) :: GameState.t()
   def play(game, target_name) do
-    [hd(game.players), Moby.Player.find_by_name(game, target_name)]
+    [hd(game.players), Moby.Player.find(game, target_name)]
     |> Enum.map(&Victory.player_score/1)
     |> check_winner(game)
   end
