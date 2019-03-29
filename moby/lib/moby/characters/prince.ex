@@ -14,7 +14,7 @@ defmodule Moby.Prince do
     case length(game.deck) do
       0 ->
         Action.execute(game, target_player, {Action, :draw_card, [game.removed_card]})
-        |> Map.put(game, :removed_card, nil)
+        |> Map.put(:removed_card, nil)
         |> Moby.Victory.round_over()
 
       _ ->
