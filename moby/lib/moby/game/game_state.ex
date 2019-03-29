@@ -11,6 +11,8 @@ defmodule Moby.GameState do
           deck: [atom],
           removed_card: atom
         }
+  # TODO: stick more information inside of here, so that the functions only take
+  # a game (magic sausage, pipelines)
   defstruct players: [%Player{}, %Player{}],
             winner: nil,
             deck: [],

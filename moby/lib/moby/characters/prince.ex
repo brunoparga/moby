@@ -1,5 +1,5 @@
 defmodule Moby.Prince do
-  alias Moby.{Action, GameState, Player}
+  alias Moby.{Action, GameState}
 
   @spec play(GameState.t(), String.t()) :: GameState.t()
   def play(game, target_player) do
