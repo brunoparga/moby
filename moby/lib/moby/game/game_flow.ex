@@ -27,16 +27,10 @@ defmodule Moby.GameFlow do
     |> Moby.Handmaid.check_protected(move)
     |> Moby.Dispatch.move(move)
     |> Victory.check()
-    |> is_over()
   end
 
-  @spec is_over(GameState.t()) :: GameState.t()
-  defp is_over(game) do
-    if game.winner, do: Victory.somebody_won(game), else: continue_game(game)
-  end
-
-  @spec continue_game(GameState.t()) :: GameState.t()
-  defp continue_game(game) do
+  @spec continue(GameState.t()) :: GameState.t()
+  def continue(game) do
     game
     |> update_order()
     |> next()

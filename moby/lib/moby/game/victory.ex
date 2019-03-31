@@ -24,14 +24,15 @@ defmodule Moby.Victory do
     case length(active_players) do
       1 ->
         Map.put(game, :winner, hd(active_players))
+        |> won()
 
       _ ->
-        game
+        Moby.GameFlow.continue(game)
     end
   end
 
-  @spec somebody_won(GameState.t()) :: no_return
-  def somebody_won(game) do
+  @spec won(GameState.t()) :: no_return
+  def won(game) do
     IO.puts("#{game.winner.name} won!")
     exit(:normal)
   end
@@ -45,7 +46,7 @@ defmodule Moby.Victory do
       |> (fn {player, _score} -> player end).()
 
     Map.put(game, :winner, winner)
-    |> somebody_won()
+    |> won()
   end
 
   @spec player_score(Player.t()) :: {Player.t(), pos_integer}
