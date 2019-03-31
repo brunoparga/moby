@@ -26,9 +26,9 @@ defmodule Moby.Test do
         Moby.make_move(pid, {card, target})
 
       card == :guard ->
-        # target = IO.gets("Choose target player: ") |> String.trim()
-        # named_card = IO.gets("Choose a non-Guard card: ") |> String.trim() |> String.to_atom()
-        Moby.make_move(pid, :guard)
+        target = IO.gets("Choose target player: ") |> String.trim()
+        named_card = IO.gets("Choose a non-Guard card: ") |> String.trim() |> String.to_atom()
+        Moby.make_move(pid, {:guard, target, named_card})
     end
 
     make_move(pid)

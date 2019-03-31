@@ -10,9 +10,17 @@ defmodule Moby.Dispatch do
   Princess, Countess and Handmaid) and naming a card (for the Guard).
   """
   @spec move(GameState.t(), {atom, String.t()}) :: GameState.t()
-  # def move(game = %GameState{target_protected: true}, {:guard, _target, _card}) do
-  #   Action.execute_current(game, {Action, :play_card, [:guard]})
-  # end
+  def move(game = %GameState{target_protected: true}, {:guard, _target, _card}) do
+    Action.execute_current(game, {Action, :play_card, [:guard]})
+    |> Map.put(:target_protected, false)
+  end
+
+  def move(game, {:guard, target, :guard}), do: game
+
+  def move(game, {:guard, target, named_card}) do
+    Action.execute_current(game, {Action, :play_card, [:guard]})
+    |> Moby.Guard.play(target, named_card)
+  end
 
   def move(game = %GameState{target_protected: true}, {card, _target}) do
     Action.execute_current(game, {Action, :play_card, [card]})
