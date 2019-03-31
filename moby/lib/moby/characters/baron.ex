@@ -8,6 +8,7 @@ defmodule Moby.Baron do
     |> do_winner(game)
   end
 
+  @spec do_winner([{Moby.Player, pos_integer()}], GameState.t()) :: GameState.t()
   defp do_winner([{self, self_score} | [{target, target_score}]], game) do
     cond do
       self_score > target_score ->

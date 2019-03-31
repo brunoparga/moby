@@ -10,6 +10,7 @@ defmodule Moby.Prince do
     |> check_deck(target_player)
   end
 
+  @spec check_deck(GameState.t(), String.t()) :: GameState.t() | no_return
   defp check_deck(game, target_player) do
     case length(game.deck) do
       0 ->

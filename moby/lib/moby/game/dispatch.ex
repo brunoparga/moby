@@ -9,7 +9,7 @@ defmodule Moby.Dispatch do
   Make the given move: play a card, targetting one player (except for the
   Princess, Countess and Handmaid) and naming a card (for the Guard).
   """
-  @spec move(GameState.t(), {atom, String.t()}) :: GameState.t()
+  @spec move(GameState.t(), {atom, String.t(), atom}) :: GameState.t()
   def move(game = %GameState{target_protected: true}, {:guard, _target, _card}) do
     Action.execute_current(game, {Action, :play_card, [:guard]})
     |> Map.put(:target_protected, false)
@@ -17,6 +17,7 @@ defmodule Moby.Dispatch do
 
   def move(game, {:guard, target, :guard}), do: game
 
+  @spec move(GameState.t(), {atom, String.t()}) :: GameState.t()
   def move(game, {:guard, target, named_card}) do
     Action.execute_current(game, {Action, :play_card, [:guard]})
     |> Moby.Guard.play(target, named_card)

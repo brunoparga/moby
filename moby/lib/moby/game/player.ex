@@ -19,6 +19,7 @@ defmodule Moby.Player do
             played_cards: [],
             active?: true,
             protected?: false
+
   # TODO: include score key in the struct, once many-round play is implemented
 
   @spec find(GameState.t(), String.t()) :: __MODULE__.t()
