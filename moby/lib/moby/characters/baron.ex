@@ -5,23 +5,19 @@ defmodule Moby.Baron do
   def play(game, target_name) do
     [hd(game.players), Moby.Player.find(game, target_name)]
     |> Enum.map(&Victory.player_score/1)
-    |> check_winner(game)
+    |> do_winner(game)
   end
 
-  defp check_winner([{self, self_score} | [{target, target_score}]], game) do
+  defp do_winner([{self, self_score} | [{target, target_score}]], game) do
     cond do
       self_score > target_score ->
-        lose(game, target)
+        Action.execute(game, target, {Action, :lose, []})
 
       self_score < target_score ->
-        lose(game, self)
+        Action.execute(game, self, {Action, :lose, []})
 
       self_score == target_score ->
         game
     end
-  end
-
-  defp lose(game, player) do
-    Action.execute(game, player, {Action, :lose, []})
   end
 end
