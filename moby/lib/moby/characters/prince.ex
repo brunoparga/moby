@@ -14,15 +14,25 @@ defmodule Moby.Prince do
   defp check_deck(game, target_player) do
     case length(game.deck) do
       0 ->
-        Action.execute(game, target_player, {Action, :draw_card, [game.removed_card]})
-        |> Map.put(:removed_card, nil)
-        |> Moby.Victory.round_over()
+        resolve_empty_deck(game, target_player)
 
       _ ->
-        [drawn_card | new_deck] = game.deck
-
-        Action.execute(game, target_player, {Action, :draw_card, [drawn_card]})
-        |> Map.put(:deck, new_deck)
+        resolve_nonempty_deck(game, target_player)
     end
+  end
+
+  @spec resolve_empty_deck(GameState.t(), String.t()) :: no_return
+  defp resolve_empty_deck(game, target_player) do
+    Action.execute(game, target_player, {Action, :draw_card, [game.removed_card]})
+    |> Map.put(:removed_card, nil)
+    |> Moby.Victory.round_over()
+  end
+
+  @spec resolve_nonempty_deck(GameState.t(), String.t()) :: GameState.t()
+  defp resolve_nonempty_deck(game, target_player) do
+    [drawn_card | new_deck] = game.deck
+
+    Action.execute(game, target_player, {Action, :draw_card, [drawn_card]})
+    |> Map.put(:deck, new_deck)
   end
 end
