@@ -17,18 +17,8 @@ defmodule Moby.Server do
     {:reply, GameState.state(game), game}
   end
 
-  # def handle_call({:make_move, {:guard, target, named_card}}, _from, game) do
-  #   game = GameFlow.make_move(game, {:guard, target, named_card})
-  #   {:reply, game, game}
-  # end
-
-  def handle_call({:make_move, {card, target}}, _from, game) do
-    game = GameFlow.make_move(game, {card, target})
-    {:reply, game, game}
-  end
-
-  def handle_call({:make_move, card}, _from, game) do
-    game = GameFlow.make_move(game, card)
+  def handle_call({:make_move, move}, _from, game) do
+    game = GameFlow.make_move(game, move)
     {:reply, game, game}
   end
 end
