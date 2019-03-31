@@ -39,13 +39,7 @@ defmodule Moby.Victory do
 
   @spec round_over(GameState.t()) :: no_return
   def round_over(game) do
-    winner =
-      game.players
-      |> Enum.map(&player_score/1)
-      |> Enum.max_by(fn {_, x} -> x end)
-      |> (fn {player, _score} -> player end).()
-
-    Map.put(game, :winner, winner)
+    Map.put(game, :winner, find_winner(game))
     |> won()
   end
 
@@ -57,5 +51,14 @@ defmodule Moby.Victory do
   @spec remove_inactive_players(GameState.t()) :: [Player.t()]
   defp remove_inactive_players(game) do
     game.players |> Enum.filter(fn player -> player.active? end)
+  end
+
+  @spec find_winner(GameState.t()) :: Player.t()
+  # TODO: handle tie?
+  defp find_winner(game) do
+    game.players
+    |> Enum.map(&player_score/1)
+    |> Enum.max_by(fn {_, x} -> x end)
+    |> (fn {player, _score} -> player end).()
   end
 end
