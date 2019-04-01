@@ -7,18 +7,21 @@ defmodule Moby.Action do
 
   alias Moby.{GameState, Player}
 
+  @type mfargs() :: {module(), atom(), [atom]}
+
   @doc """
-  Run the given action on the current player.
+  Run the given action on the current player. Return a game.
   """
-  @spec execute_current(GameState.t(), {module(), atom(), [atom]}) :: GameState.t()
+  @spec execute_current(GameState.t(), mfargs()) :: GameState.t()
   def execute_current(game, mfa) do
     execute(game, hd(game.players).name, mfa)
   end
 
   @doc """
-  Run the given action on the given player; return a game.
+  Run the given action on the given player. Return a game.
   """
-  @spec execute(GameState.t(), String.t(), {module(), atom(), [atom]}) :: GameState.t()
+  # TODO: DO SOMETHING ABOUT THIS TAKING A NAME OR A PLAYER STRUCT
+  @spec execute(GameState.t(), String.t(), mfargs()) :: GameState.t()
   def execute(game, player_name, mfa) do
     players = new_players(player_name, game.players, mfa)
     %GameState{game | players: players}

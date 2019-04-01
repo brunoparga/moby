@@ -34,9 +34,9 @@ defmodule Moby do
   - {:card_atom, "target name"} for the King, Prince, Baron and Priest
   - {:guard, "target name", :named_card} for the Guard.
   TODO: make this take a Map, to match the incoming JSON
-  TODO: validate that the player making the move is the one who's up to play
   """
   @spec make_move(pid, atom | {atom, String.t()} | {:guard, String.t(), atom}) :: GameState.t()
+  # TODO: validate that the player making the move is the one who's up to play
   def make_move(game_pid, move) do
     # GenServer.call(game_pid, {:make_move, move})
     # TODO: Uncomment the line above and delete the below - this is just for testing!!!

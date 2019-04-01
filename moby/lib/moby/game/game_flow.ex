@@ -21,7 +21,7 @@ defmodule Moby.GameFlow do
   @spec make_move(GameState.t(), atom | {atom, String.t()} | {:guard, String.t(), atom}) ::
           GameState.t()
   def make_move(game, move) do
-    # Assumes the player actually has the given card.
+    # Assumes the player actually has the given card. TODO: validate.
     game
     |> Moby.Handmaid.end_own_protection()
     |> Moby.Handmaid.check_protected(move)

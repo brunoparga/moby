@@ -17,7 +17,7 @@ defmodule Moby.Victory do
     guard: 1
   }
 
-  @spec check(GameState.t()) :: GameState.t()
+  @spec check(GameState.t()) :: GameState.t() | no_return
   def check(game) do
     active_players = remove_inactive_players(game)
 
@@ -50,7 +50,7 @@ defmodule Moby.Victory do
 
   @spec remove_inactive_players(GameState.t()) :: [Player.t()]
   defp remove_inactive_players(game) do
-    game.players |> Enum.filter(fn player -> player.active? end)
+    Enum.filter(game.players, fn player -> player.active? end)
   end
 
   @spec find_winner(GameState.t()) :: Player.t()
@@ -59,6 +59,9 @@ defmodule Moby.Victory do
     game.players
     |> Enum.map(&player_score/1)
     |> Enum.max_by(fn {_, x} -> x end)
-    |> (fn {player, _score} -> player end).()
+    |> remove_score()
   end
+
+  @spec remove_score({Player.t(), pos_integer}) :: Player.t()
+  defp remove_score({player, _score}), do: player
 end
