@@ -20,9 +20,13 @@ defmodule Moby.GameFlow do
   """
   @spec make_move(GameState.t(), Moby.move()) :: GameState.t() | no_return
   def make_move(game, move) do
-    # Assumes the player actually has the given card. TODO: validate.
     game
     |> GameState.set_move(move)
+    |> Moby.Validate.validate()
+  end
+
+  def move_is_valid(game) do
+    game
     |> Moby.Dispatch.move()
     |> Victory.check()
   end
@@ -32,6 +36,11 @@ defmodule Moby.GameFlow do
     game
     |> update_order()
     |> next()
+  end
+
+  @spec reset(GameState.t()) :: GameState.t()
+  def reset(game) do
+    %GameState{game | latest_move: nil, target_player: nil}
   end
 
   @spec update_order(GameState.t()) :: GameState.t()
@@ -48,6 +57,7 @@ defmodule Moby.GameFlow do
 
     Action.execute_current(game, {Action, :draw_card, [drawn_card]})
     |> Map.put(:deck, new_deck)
+    |> reset()
     |> Moby.Countess.check()
   end
 end

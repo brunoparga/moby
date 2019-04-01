@@ -10,10 +10,6 @@ defmodule Moby.Dispatch do
   Princess, Countess and Handmaid) and naming a card (for the Guard).
   """
   @spec move(GameState.t()) :: GameState.t()
-  # TODO: invalidate this move
-  def move(game = %GameState{latest_move: %{played_card: :guard, named_card: :guard}}),
-    do: Action.execute_current(game, {Action, :play_card, [:guard]})
-
   def move(game) do
     Action.execute_current(game, {Action, :play_card, [game.latest_move.played_card]})
     |> do_action()
