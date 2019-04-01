@@ -23,17 +23,21 @@ defmodule Moby.Action do
   # TODO: DO SOMETHING ABOUT THIS TAKING A NAME OR A PLAYER STRUCT
   @spec execute(GameState.t(), String.t(), mfargs()) :: GameState.t()
   def execute(game, player_name, mfa) do
-    players = new_players(player_name, game.players, mfa)
-    %GameState{game | players: players}
+    updated_players = new_players(game.players, player_name, mfa)
+    Map.put(game, :players, updated_players)
   end
 
-  @spec new_players(String.t(), [Player.t()], {module(), atom(), [atom]}) :: [Player.t()]
-  defp new_players(player_name, players, mfa) do
-    Enum.map(players, fn player ->
-      if player.name == player_name, do: new_player(player, mfa), else: player
-    end)
+  @spec new_players([Player.t()], String.t(), mfargs()) :: [Player.t()]
+  defp new_players(players, player_name, mfa) do
+    Enum.map(players, &build_player(&1, player_name, mfa))
   end
 
+  @spec build_player(Player.t(), String.t(), mfargs()) :: Player.t()
+  defp build_player(player, player_name, mfa) do
+    if player.name == player_name, do: new_player(player, mfa), else: player
+  end
+
+  @spec new_player(Player.t(), mfargs()) :: Player.t()
   defp new_player(player, {module, function, args}) do
     apply(module, function, [player] ++ args)
   end

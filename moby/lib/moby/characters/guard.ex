@@ -1,12 +1,10 @@
 defmodule Moby.Guard do
-  @spec play(Moby.GameState.t(), String.t(), atom) :: Moby.GameState.t()
-  def play(game, target, named_card) do
-    target_player = Moby.Player.find(game, target)
+  alias Moby.{Action, GameState}
 
-    if hd(target_player.current_cards) == named_card do
-      Moby.Action.execute(game, target, {Moby.Action, :lose, []})
-    else
-      game
-    end
+  @spec play(GameState.t()) :: GameState.t()
+  def play(game) do
+    if hd(game.target_player.current_cards) == game.latest_move.named_card,
+      do: Action.execute(game, game.target_player.name, {Action, :lose, []}),
+      else: game
   end
 end

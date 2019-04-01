@@ -1,21 +1,21 @@
 defmodule Moby.Baron do
   alias Moby.{Action, GameState, Victory}
 
-  @spec play(GameState.t(), String.t()) :: GameState.t()
-  def play(game, target_name) do
-    [hd(game.players), Moby.Player.find(game, target_name)]
+  @spec play(GameState.t()) :: GameState.t()
+  def play(game) do
+    [hd(game.players), game.target_player]
     |> Enum.map(&Victory.player_score/1)
     |> do_winner(game)
   end
 
-  @spec do_winner([{Moby.Player, pos_integer()}], GameState.t()) :: GameState.t()
-  defp do_winner([{self, self_score} | [{target, target_score}]], game) do
+  @spec do_winner([{Moby.Player.t(), pos_integer()}], GameState.t()) :: GameState.t()
+  defp do_winner([{_self, self_score} | [{target, target_score}]], game) do
     cond do
       self_score > target_score ->
-        Action.execute(game, target, {Action, :lose, []})
+        Action.execute(game, target.name, {Action, :lose, []})
 
       self_score < target_score ->
-        Action.execute(game, self, {Action, :lose, []})
+        Action.execute_current(game, {Action, :lose, []})
 
       self_score == target_score ->
         game

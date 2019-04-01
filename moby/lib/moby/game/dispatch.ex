@@ -9,47 +9,42 @@ defmodule Moby.Dispatch do
   Make the given move: play a card, targetting one player (except for the
   Princess, Countess and Handmaid) and naming a card (for the Guard).
   """
-  @spec move(GameState.t(), {atom, String.t(), atom}) :: GameState.t()
-  def move(game = %GameState{target_protected: true}, {:guard, _target, _card}) do
-    Action.execute_current(game, {Action, :play_card, [:guard]})
-    |> Map.put(:target_protected, false)
+  @spec move(GameState.t()) :: GameState.t()
+  # TODO: invalidate this move
+  def move(game = %GameState{latest_move: %{played_card: :guard, named_card: :guard}}),
+    do: Action.execute_current(game, {Action, :play_card, [:guard]})
+
+  def move(game) do
+    Action.execute_current(game, {Action, :play_card, [game.latest_move.played_card]})
+    |> do_action()
   end
 
-  def move(game, {:guard, target, :guard}), do: game
+  @spec do_action(GameState.t()) :: GameState.t()
+  defp do_action(game), do: if(valid_target?(game), do: send_to_module(game), else: game)
 
-  @spec move(GameState.t(), {atom, String.t()}) :: GameState.t()
-  def move(game, {:guard, target, named_card}) do
-    Action.execute_current(game, {Action, :play_card, [:guard]})
-    |> Moby.Guard.play(target, named_card)
+  @spec valid_target?(GameState.t()) :: boolean
+  defp valid_target?(game) do
+    untargeted_card_played = game.latest_move.played_card in ~w[princess countess]a
+    target_protected = Map.has_key?(game.latest_move, :target) and game.target_player.protected?
+    not (untargeted_card_played or target_protected)
   end
 
-  def move(game = %GameState{target_protected: true}, {card, _target}) do
-    Action.execute_current(game, {Action, :play_card, [card]})
-    |> Map.put(:target_protected, false)
+  @spec send_to_module(GameState.t()) :: GameState.t()
+  defp send_to_module(game) do
+    game.latest_move.played_card
+    |> modulize_card
+    |> apply(:play, [game])
   end
 
-  def move(game, {:king, target}) do
-    Action.execute_current(game, {Action, :play_card, [:king]})
-    |> Moby.King.play(target)
+  @spec modulize_card(atom) :: atom
+  defp modulize_card(card) do
+    card
+    |> Atom.to_string()
+    |> String.capitalize()
+    |> prepend_elixir()
+    |> String.to_atom()
   end
 
-  def move(game, {:prince, target}) do
-    Action.execute_current(game, {Action, :play_card, [:prince]})
-    |> Moby.Prince.play(target)
-  end
-
-  def move(game, {:baron, target}) do
-    Action.execute_current(game, {Action, :play_card, [:baron]})
-    |> Moby.Baron.play(target)
-  end
-
-  @spec move(GameState.t(), atom) :: GameState.t()
-  def move(game, :handmaid) do
-    Action.execute_current(game, {Action, :play_card, [:handmaid]})
-    |> Moby.Handmaid.play()
-  end
-
-  def move(game, played_card) when is_atom(played_card) do
-    Action.execute_current(game, {Action, :play_card, [played_card]})
-  end
+  @spec prepend_elixir(String.t()) :: String.t()
+  defp prepend_elixir(card), do: "Elixir.Moby.#{card}"
 end

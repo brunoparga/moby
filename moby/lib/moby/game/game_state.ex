@@ -10,15 +10,16 @@ defmodule Moby.GameState do
           winner: nil | Player.t(),
           deck: [atom],
           removed_card: atom,
-          target_protected: boolean
+          latest_move: nil | Moby.move(),
+          target_player: nil | Player.t()
         }
-  # TODO: stick more information inside of here, so that the functions only take
-  # a game (magic sausage, pipelines)
+        
   defstruct players: [%Player{}, %Player{}],
             winner: nil,
             deck: [],
             removed_card: nil,
-            target_protected: false
+            latest_move: nil,
+            target_player: nil
 
   # TODO: extract out the information about the card of the opposing player
   @spec state(t) :: t
@@ -32,10 +33,24 @@ defmodule Moby.GameState do
     %__MODULE__{players: [joe, ann], deck: deck, removed_card: removed}
   end
 
+  @spec set_move(t, Moby.move()) :: t
+  def set_move(game, move) do
+    Moby.Handmaid.end_own_protection(game)
+    |> Map.put(:latest_move, move)
+    |> set_target()
+  end
+
   @spec shuffle_deck() :: [atom]
   defp shuffle_deck() do
     ~w[princess countess king prince prince handmaid handmaid
        baron baron priest priest guard guard guard guard guard]a
     |> Enum.shuffle()
   end
+
+  @spec set_target(t) :: t
+  defp set_target(game = %__MODULE__{latest_move: %{target: name}}) do
+    Map.put(game, :target_player, Player.find(game, name))
+  end
+
+  defp set_target(game), do: Map.put(game, :target_player, nil)
 end

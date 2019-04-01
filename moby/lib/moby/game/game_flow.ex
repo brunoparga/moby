@@ -18,14 +18,12 @@ defmodule Moby.GameFlow do
   Makes a move and continues the game, unless the move caused someone to win the
   round.
   """
-  @spec make_move(GameState.t(), atom | {atom, String.t()} | {:guard, String.t(), atom}) ::
-          GameState.t()
+  @spec make_move(GameState.t(), Moby.move()) :: GameState.t() | no_return
   def make_move(game, move) do
     # Assumes the player actually has the given card. TODO: validate.
     game
-    |> Moby.Handmaid.end_own_protection()
-    |> Moby.Handmaid.check_protected(move)
-    |> Moby.Dispatch.move(move)
+    |> GameState.set_move(move)
+    |> Moby.Dispatch.move()
     |> Victory.check()
   end
 

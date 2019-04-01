@@ -14,7 +14,7 @@ defmodule Moby.Countess do
   @spec play(GameState.t(), boolean) :: GameState.t()
   defp play(game, _must_play_countess = true) do
     # TODO: This should change to alert the player of the countess situation
-    Moby.GameFlow.make_move(game, :countess)
+    Moby.GameFlow.make_move(game, %{played_card: :countess})
   end
 
   defp play(game, _must_play_countess = false), do: game

@@ -7,6 +7,12 @@ defmodule Moby do
 
   defdelegate test, to: Moby.Test
 
+  @type move() :: %{
+          required(:played_card) => atom,
+          optional(:target) => String.t(),
+          optional(:named_card) => atom
+        }
+
   @doc """
   Start a game in the server, return the corresponding pid.
   TODO: change the supervision structure to match Tic-tac-toe
@@ -27,16 +33,13 @@ defmodule Moby do
   end
 
   @doc """
-  A call to make_move has three possible formats, depending on the card
-  played. The move itself is:
-  - :card_atom in the case of the Princess, Countess and Handmaid, which require
-    no target.
-  - {:card_atom, "target name"} for the King, Prince, Baron and Priest
-  - {:guard, "target name", :named_card} for the Guard.
-  TODO: make this take a Map, to match the incoming JSON
+  Requests a move to the given server. The move has a required key, :played_card,
+  and two optional ones: :named_card for the Guard and :target for all cards that
+  target a player (King, Prince, Baron, Priest and Guard). Card values are atoms,
+  the target name is a string.
   """
-  @spec make_move(pid, atom | {atom, String.t()} | {:guard, String.t(), atom}) :: GameState.t()
   # TODO: validate that the player making the move is the one who's up to play
+  @spec make_move(pid, move()) :: GameState.t()
   def make_move(game_pid, move) do
     # GenServer.call(game_pid, {:make_move, move})
     # TODO: Uncomment the line above and delete the below - this is just for testing!!!

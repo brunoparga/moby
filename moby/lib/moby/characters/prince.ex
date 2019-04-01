@@ -1,38 +1,33 @@
 defmodule Moby.Prince do
   alias Moby.{Action, GameState}
 
-  @spec play(GameState.t(), String.t()) :: GameState.t()
-  def play(game, target_player) do
-    player = Moby.Player.find(game, target_player)
-    target_card = hd(player.current_cards)
+  @spec play(GameState.t()) :: GameState.t()
+  def play(game) do
+    target_card = hd(game.target_player.current_cards)
 
-    Action.execute(game, target_player, {Action, :play_card, [target_card]})
-    |> check_deck(target_player)
+    Action.execute(game, game.target_player.name, {Action, :play_card, [target_card]})
+    |> check_deck()
   end
 
-  @spec check_deck(GameState.t(), String.t()) :: GameState.t() | no_return
-  defp check_deck(game, target_player) do
-    case length(game.deck) do
-      0 ->
-        resolve_empty_deck(game, target_player)
-
-      _ ->
-        resolve_nonempty_deck(game, target_player)
-    end
+  @spec check_deck(GameState.t()) :: GameState.t() | no_return
+  def check_deck(game) do
+    if length(game.deck) == 0,
+      do: resolve_empty_deck(game),
+      else: resolve_nonempty_deck(game)
   end
 
-  @spec resolve_empty_deck(GameState.t(), String.t()) :: no_return
-  defp resolve_empty_deck(game, target_player) do
-    Action.execute(game, target_player, {Action, :draw_card, [game.removed_card]})
+  @spec resolve_empty_deck(GameState.t()) :: no_return
+  defp resolve_empty_deck(game) do
+    Action.execute(game, game.target_player.name, {Action, :draw_card, [game.removed_card]})
     |> Map.put(:removed_card, nil)
     |> Moby.Victory.round_over()
   end
 
-  @spec resolve_nonempty_deck(GameState.t(), String.t()) :: GameState.t()
-  defp resolve_nonempty_deck(game, target_player) do
+  @spec resolve_nonempty_deck(GameState.t()) :: GameState.t()
+  defp resolve_nonempty_deck(game) do
     [drawn_card | new_deck] = game.deck
 
-    Action.execute(game, target_player, {Action, :draw_card, [drawn_card]})
+    Action.execute(game, game.target_player.name, {Action, :draw_card, [drawn_card]})
     |> Map.put(:deck, new_deck)
   end
 end

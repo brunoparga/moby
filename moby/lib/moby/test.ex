@@ -19,16 +19,16 @@ defmodule Moby.Test do
 
     cond do
       card in ~w[princess countess handmaid]a ->
-        Moby.make_move(pid, card)
+        Moby.make_move(pid, %{played_card: card})
 
       card in ~w[king prince baron priest]a ->
         target = IO.gets("Choose target player: ") |> String.trim()
-        Moby.make_move(pid, {card, target})
+        Moby.make_move(pid, %{played_card: card, target: target})
 
       card == :guard ->
         target = IO.gets("Choose target player: ") |> String.trim()
         named_card = IO.gets("Choose a non-Guard card: ") |> String.trim() |> String.to_atom()
-        Moby.make_move(pid, {:guard, target, named_card})
+        Moby.make_move(pid, %{played_card: :guard, target: target, named_card: named_card})
     end
 
     make_move(pid)
