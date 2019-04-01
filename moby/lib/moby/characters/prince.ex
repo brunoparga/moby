@@ -5,6 +5,7 @@ defmodule Moby.Prince do
   def play(game) do
     target_card = hd(game.target_player.current_cards)
 
+    # TODO: self-targeting is not working
     Action.execute(game, game.target_player.name, {Action, :play_card, [target_card]})
     |> check_deck()
   end

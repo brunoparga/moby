@@ -13,7 +13,7 @@ defmodule Moby.GameState do
           latest_move: nil | Moby.move(),
           target_player: nil | Player.t()
         }
-        
+
   defstruct players: [%Player{}, %Player{}],
             winner: nil,
             deck: [],
