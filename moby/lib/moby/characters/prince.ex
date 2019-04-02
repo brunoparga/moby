@@ -3,9 +3,10 @@ defmodule Moby.Prince do
 
   @spec play(GameState.t()) :: GameState.t()
   def play(game) do
-    target_card = hd(game.target_player.current_cards)
+    # this can't be just game.target_player because of self-targeting
+    target_player = Moby.Player.find(game, game.latest_move.target)
+    target_card = hd(target_player.current_cards)
 
-    # TODO: self-targeting is not working
     Action.execute(game, game.target_player.name, {Action, :play_card, [target_card]})
     |> check_deck()
   end
