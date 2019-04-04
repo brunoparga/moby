@@ -8,14 +8,21 @@ defmodule Moby.Prince do
     target_card = hd(target_player.current_cards)
 
     Action.execute(game, game.target_player.name, {Action, :play_card, [target_card]})
-    |> check_deck()
+    |> check_deck(target_card)
   end
 
-  @spec check_deck(GameState.t()) :: GameState.t() | no_return
-  def check_deck(game) do
-    if length(game.deck) == 0,
-      do: resolve_empty_deck(game),
-      else: resolve_nonempty_deck(game)
+  @spec check_deck(GameState.t(), atom) :: GameState.t() | no_return
+  defp check_deck(game, target_card) do
+    cond do
+      target_card == :princess ->
+        game
+
+      length(game.deck) == 0 ->
+        resolve_empty_deck(game)
+
+      true ->
+        resolve_nonempty_deck(game)
+    end
   end
 
   @spec resolve_empty_deck(GameState.t()) :: no_return
