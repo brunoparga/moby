@@ -13,9 +13,9 @@ defmodule Moby.Validate do
 
   defp valid_move?(game) do
     has_card?(game) and
-    target_active?(game) and
-    valid_target?(game) and
-    lonely_prince?(game)
+      target_active?(game) and
+      valid_target?(game) and
+      lonely_prince?(game)
   end
 
   @spec has_card?(GameState.t()) :: boolean
@@ -40,11 +40,12 @@ defmodule Moby.Validate do
   # Prince must choose themself as a target.
   @spec lonely_prince?(GameState.t()) :: boolean
   defp lonely_prince?(%GameState{
-    players: [current | others],
-    latest_move: %{played_card: :prince, target: target}}) do
-      if Enum.all?(others, fn player -> player.protected? end),
-        do: current.name == target,
-        else: true
+         players: [current | others],
+         latest_move: %{played_card: :prince, target: target}
+       }) do
+    if Enum.all?(others, fn player -> player.protected? end),
+      do: current.name == target,
+      else: true
   end
 
   defp lonely_prince?(_game), do: true
