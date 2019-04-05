@@ -11,11 +11,6 @@ defmodule Moby.Handmaid do
     Moby.Action.execute_current(game, {__MODULE__, :protect, []})
   end
 
-  @spec end_protection(GameState.t()) :: GameState.t()
-  defp end_protection(game) do
-    Moby.Action.execute_current(game, {__MODULE__, :unprotect, []})
-  end
-
   @spec protect(Player.t()) :: Player.t()
   def protect(player) do
     Map.put(player, :protected?, true)
@@ -24,5 +19,10 @@ defmodule Moby.Handmaid do
   @spec unprotect(Player.t()) :: Player.t()
   def unprotect(player) do
     Map.put(player, :protected?, false)
+  end
+
+  @spec end_protection(GameState.t()) :: GameState.t()
+  defp end_protection(game) do
+    Moby.Action.execute_current(game, {__MODULE__, :unprotect, []})
   end
 end
