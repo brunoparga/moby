@@ -20,16 +20,18 @@ Prince)
 There is a very basic text interface, currently embedded within the server
 application
 
+Keeping track of Tokens of Affection
+
+Testing all characters (except the Priest)
+
 ### TO DO
 
 Adding a third and fourth player
-
-Keeping track of Tokens of Affection
 
 Extracting the text client
 
 Separating the info that gets sent to each player
 
-Implementing the Priest
+Implementing and testing the Priest
 
 Single-page Phoenix app with LiveView
