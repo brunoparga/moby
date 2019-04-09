@@ -5,7 +5,7 @@ defmodule Moby.Validate do
   def validate(game) do
     if valid_move?(game),
       do: GameFlow.move_is_valid(game),
-      else: GameFlow.reset(game)
+      else: GameFlow.reset_move(game)
   end
 
   @spec valid_move?(GameState.t()) :: boolean

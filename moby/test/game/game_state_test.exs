@@ -16,40 +16,40 @@ defmodule Moby.GameStateTest do
       actual = GameState.initialize()
 
       assert %GameState{
-        players: [
-          %Player{
-            name: "Joe",
-            current_cards: joe_current_cards,
-            played_cards: [],
-            active?: true,
-            protected?: false
-          },
-          %Player{
-            name: "Ann",
-            current_cards: ann_current_cards,
-            played_cards: [],
-            active?: true,
-            protected?: false
-          }
-        ],
-        deck: deck,
-        removed_card: removed_card,
-        winner: nil,
-        latest_move: nil,
-        target_player: nil
-      } = actual
+               players: [
+                 %Player{
+                   name: "Joe",
+                   current_cards: joe_current_cards,
+                   played_cards: [],
+                   active?: true,
+                   protected?: false
+                 },
+                 %Player{
+                   name: "Ann",
+                   current_cards: ann_current_cards,
+                   played_cards: [],
+                   active?: true,
+                   protected?: false
+                 }
+               ],
+               deck: deck,
+               removed_card: removed_card,
+               winner: nil,
+               latest_move: nil,
+               target_player: nil
+             } = actual
 
       sorted_deck = ~w[baron baron countess guard guard guard guard guard handmaid
         handmaid king priest priest prince prince princess]a
 
       actual_cards =
-        joe_current_cards ++
-        ann_current_cards ++
-        deck ++
-        [removed_card]
-        |> Enum.sort
+        (joe_current_cards ++
+           ann_current_cards ++
+           deck ++
+           [removed_card])
+        |> Enum.sort()
 
-        assert actual_cards == sorted_deck
+      assert actual_cards == sorted_deck
     end
   end
 
@@ -72,7 +72,10 @@ defmodule Moby.GameStateTest do
             protected?: false
           }
         ],
-        deck: Enum.shuffle(~w[princess countess prince handmaid baron baron priest guard guard guard guard guard]a),
+        deck:
+          Enum.shuffle(
+            ~w[princess countess prince handmaid baron baron priest guard guard guard guard guard]a
+          ),
         removed_card: :priest,
         winner: nil,
         latest_move: nil,

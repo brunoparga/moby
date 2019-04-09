@@ -38,8 +38,8 @@ defmodule Moby.GameFlow do
     |> next()
   end
 
-  @spec reset(GameState.t()) :: GameState.t()
-  def reset(game) do
+  @spec reset_move(GameState.t()) :: GameState.t()
+  def reset_move(game) do
     %GameState{game | latest_move: nil, target_player: nil}
   end
 
@@ -57,7 +57,7 @@ defmodule Moby.GameFlow do
 
     Action.execute_current(game, {Action, :draw_card, [drawn_card]})
     |> Map.put(:deck, new_deck)
-    |> reset()
+    |> reset_move()
     |> Moby.Countess.check()
   end
 end

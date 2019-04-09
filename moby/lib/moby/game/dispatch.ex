@@ -20,9 +20,9 @@ defmodule Moby.Dispatch do
 
   @spec valid_target?(GameState.t()) :: boolean
   defp valid_target?(game) do
-    untargeted_card_played = game.latest_move.played_card in ~w[princess countess]a
+    nonmodule_card_played = game.latest_move.played_card in ~w[princess countess]a
     target_protected = Map.has_key?(game.latest_move, :target) and game.target_player.protected?
-    not (untargeted_card_played or target_protected)
+    not (nonmodule_card_played or target_protected)
   end
 
   @spec send_to_module(GameState.t()) :: GameState.t()
