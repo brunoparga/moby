@@ -81,7 +81,7 @@ defmodule Moby.ValidateTest do
         assert actual == expected
     end
 
-    test "an invalid game (taregt is out of the round) is reset" do
+    test "an invalid game (target is out of the round) is reset" do
       joe = %Player{name: "Joe", current_cards: [:handmaid, :baron]}
 
       ann = %Player{name: "Ann", active?: false}
