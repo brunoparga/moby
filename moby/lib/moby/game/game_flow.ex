@@ -15,8 +15,7 @@ defmodule Moby.GameFlow do
   end
 
   @doc """
-  Makes a move and continues the game, unless the move caused someone to win the
-  round.
+  Inserts the move into the game state and checks if it's a valid move.
   """
   @spec make_move(GameState.t(), Moby.move()) :: GameState.t() | no_return
   def make_move(game, move) do
