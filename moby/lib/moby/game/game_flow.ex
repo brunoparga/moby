@@ -31,6 +31,8 @@ defmodule Moby.GameFlow do
   end
 
   @spec continue(GameState.t()) :: GameState.t()
+  def continue(game = %GameState{deck: []}), do: Victory.round_over(game)
+    
   def continue(game) do
     game
     |> update_order()
@@ -49,8 +51,6 @@ defmodule Moby.GameFlow do
   end
 
   @spec next(GameState.t()) :: GameState.t()
-  defp next(game = %GameState{deck: []}), do: Victory.round_over(game)
-
   defp next(game) do
     [drawn_card | new_deck] = game.deck
 
