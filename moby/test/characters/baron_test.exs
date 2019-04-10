@@ -19,7 +19,7 @@ defmodule Moby.BaronTest do
       actual = Moby.Baron.play(game)
 
       expected_joe = %Player{joe | current_cards: [:prince], played_cards: [:baron]}
-      expected_ann = %Player{ann | current_cards: [:guard], active?: false}
+      expected_ann = %Player{ann | current_cards: [], played_cards: [:guard], active?: false}
       expected = %GameState{game | players: [expected_joe, expected_ann]}
 
       assert actual == expected
@@ -41,8 +41,8 @@ defmodule Moby.BaronTest do
 
       expected_joe = %Player{
         joe
-        | current_cards: [:prince],
-          played_cards: [:baron],
+        | current_cards: [],
+          played_cards: [:baron, :prince],
           active?: false
       }
 

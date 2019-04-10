@@ -19,7 +19,7 @@ defmodule Moby.GuardTest do
       actual = Moby.Guard.play(game)
 
       expected_joe = %Player{joe | current_cards: [:princess], played_cards: [:guard]}
-      expected_ann = %Player{ann | current_cards: [:baron], active?: false}
+      expected_ann = %Player{ann | current_cards: [], played_cards: [:baron], active?: false}
       expected = %GameState{game | players: [expected_joe, expected_ann]}
 
       assert actual == expected

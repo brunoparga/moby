@@ -61,7 +61,13 @@ defmodule Moby.Action do
 
   @spec lose(Player.t()) :: Player.t()
   def lose(player) do
-    Map.put(player, :active?, false)
+    # TODO: refactor this to use play_card
+    %Player{
+      player
+      | active?: false,
+        current_cards: [],
+        played_cards: player.played_cards ++ player.current_cards
+    }
   end
 
   @spec remove_from_hand(Player.t(), atom) :: Player.t()

@@ -32,7 +32,7 @@ defmodule Moby.GameFlow do
 
   @spec continue(GameState.t()) :: GameState.t()
   def continue(game = %GameState{deck: []}), do: Victory.round_over(game)
-    
+
   def continue(game) do
     game
     |> update_order()

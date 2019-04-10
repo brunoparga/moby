@@ -19,8 +19,8 @@ defmodule Moby.PrincessTest do
 
       expected_joe = %Player{
         joe
-        | current_cards: [:king],
-          played_cards: [:princess],
+        | current_cards: [],
+          played_cards: [:princess, :king],
           active?: false
       }
 
