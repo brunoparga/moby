@@ -8,6 +8,7 @@ defmodule Moby.GameStateTest do
       game = GameState.initialize()
 
       assert GameState.state(game) == game
+      assert GameState.state(42) == 42
     end
   end
 
@@ -17,26 +18,11 @@ defmodule Moby.GameStateTest do
 
       assert %GameState{
                players: [
-                 %Player{
-                   name: "Joe",
-                   current_cards: joe_current_cards,
-                   played_cards: [],
-                   active?: true,
-                   protected?: false
-                 },
-                 %Player{
-                   name: "Ann",
-                   current_cards: ann_current_cards,
-                   played_cards: [],
-                   active?: true,
-                   protected?: false
-                 }
+                 %Player{name: "Joe", current_cards: joe_current_cards},
+                 %Player{name: "Ann", current_cards: ann_current_cards}
                ],
                deck: deck,
-               removed_card: removed_card,
-               winner: nil,
-               latest_move: nil,
-               target_player: nil
+               removed_card: removed_card
              } = actual
 
       sorted_deck = ~w[baron baron countess guard guard guard guard guard handmaid
@@ -57,29 +43,14 @@ defmodule Moby.GameStateTest do
     setup do
       game = %GameState{
         players: [
-          %Player{
-            name: "Joe",
-            current_cards: [:hamdmaid, :king],
-            played_cards: [],
-            active?: true,
-            protected?: false
-          },
-          %Player{
-            name: "Ann",
-            current_cards: [:prince],
-            played_cards: [],
-            active?: true,
-            protected?: false
-          }
+          %Player{name: "Joe", current_cards: [:handmaid, :king]},
+          %Player{name: "Ann", current_cards: [:prince]}
         ],
         deck:
           Enum.shuffle(
             ~w[princess countess prince handmaid baron baron priest guard guard guard guard guard]a
           ),
-        removed_card: :priest,
-        winner: nil,
-        latest_move: nil,
-        target_player: nil
+        removed_card: :priest
       }
 
       [game: game]

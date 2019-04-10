@@ -24,7 +24,7 @@ defmodule Moby.GameFlowTest do
     test "a game with an empty deck exits" do
       game = %GameState{
         players: [
-          %Player{name: "Banana", current_cards: [:princess]},
+          %Player{name: "Obi", current_cards: [:princess]},
           %Player{current_cards: [:guard]}
         ],
         deck: []
