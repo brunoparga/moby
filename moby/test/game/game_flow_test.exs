@@ -1,48 +1,75 @@
 defmodule Moby.GameFlowTest do
   use ExUnit.Case
 
-  alias Moby.{GameFlow, Player}
+  import Moby.GameFlow
+
+  alias Moby.{GameState, Player}
 
   describe "new_game/0" do
-    test "starts a new game" do
-      actual = GameFlow.new_game()
+    # This is just a composition of GameState.initialize/0 and Countess.check/1.
+    # Please refer to the tests for those functions.
+  end
 
-      assert %Moby.GameState{
-               players: [
-                 %Player{
-                   name: "Joe",
-                   current_cards: joe_current_cards,
-                   played_cards: joe_played_cards,
-                   active?: true,
-                   protected?: false
-                 },
-                 %Player{
-                   name: "Ann",
-                   current_cards: ann_current_cards,
-                   played_cards: [],
-                   active?: true,
-                   protected?: false
-                 }
-               ],
-               deck: deck,
-               removed_card: removed_card,
-               winner: nil,
-               latest_move: nil,
-               target_player: nil
-             } = actual
+  describe "make_move/2" do
+    # This is just a composition of GameState.set_move/2 and Validate.validate/1.
+    # Please refer to the tests for those functions.
+  end
 
-      sorted_deck = ~w[baron baron countess guard guard guard guard guard handmaid
-        handmaid king priest priest prince prince princess]a
+  describe "move_is_valid/1" do
+    # This is just a composition of Dispatch.move/1 and Victory.check/1.
+    # Please refer to the tests for those functions.
+  end
 
-      actual_cards =
-        (joe_current_cards ++
-           joe_played_cards ++
-           ann_current_cards ++
-           deck ++
-           [removed_card])
-        |> Enum.sort()
+  describe "continue/1" do
+    test "a game with an empty deck exits" do
+      game = %GameState{
+        players: [
+          %Player{name: "Banana", current_cards: [:princess]},
+          %Player{current_cards: [:guard]}
+        ],
+        deck: []
+      }
 
-      assert actual_cards == sorted_deck
+      assert catch_exit(continue(game)) == :normal
+    end
+
+    test "a game with cards left in the deck continues" do
+      game = %GameState{
+        players: [
+          %Player{name: "Ann", current_cards: [:princess], played_cards: [:king]},
+          %Player{name: "Joe", current_cards: [:baron], played_cards: [:guard]}
+        ],
+        deck: ~w[countess prince prince handmaid handmaid baron priest guard guard guard guard]a,
+        removed_card: :priest,
+        latest_move: %{played_card: :king, target: "Joe"},
+        target_player: %Player{name: "Joe", current_cards: [:baron], played_cards: [:guard]}
+      }
+
+      expected = %GameState{
+        game
+        | players: [
+            %Player{name: "Joe", current_cards: [:baron, :countess], played_cards: [:guard]},
+            %Player{name: "Ann", current_cards: [:princess], played_cards: [:king]}
+          ],
+          deck: tl(game.deck),
+          latest_move: nil,
+          target_player: nil
+      }
+
+      actual = continue(game)
+
+      assert actual == expected
+    end
+  end
+
+  describe "reset_move/1" do
+    test "clears the game's latest move and target player fields" do
+      game = expected = GameState.initialize()
+      temp = GameState.set_move(game, %{played_card: :priest, target: "Ann"})
+
+      actual = reset_move(temp)
+
+      assert actual == expected
     end
   end
 end
