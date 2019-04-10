@@ -1,5 +1,5 @@
 defmodule Moby.GuardTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   alias Moby.{Action, GameState, Player}
 

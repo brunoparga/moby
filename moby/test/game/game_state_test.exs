@@ -1,5 +1,5 @@
 defmodule Moby.GameStateTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   alias Moby.{GameState, Player}
 
