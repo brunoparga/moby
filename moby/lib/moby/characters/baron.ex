@@ -5,11 +5,11 @@ defmodule Moby.Baron do
   def play(game) do
     [hd(game.players), game.target_player]
     |> Enum.map(&Victory.score_card/1)
-    |> do_winner(game)
+    |> compare(game)
   end
 
-  @spec do_winner([{Moby.Player.t(), pos_integer()}], GameState.t()) :: GameState.t()
-  defp do_winner([{_self, self_score} | [{target, target_score}]], game) do
+  @spec compare([{Moby.Player.t(), pos_integer()}], GameState.t()) :: GameState.t()
+  defp compare([{_self, self_score} | [{target, target_score}]], game) do
     cond do
       self_score > target_score ->
         Action.execute(game, target.name, {Action, :lose, []})
