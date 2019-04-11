@@ -43,8 +43,8 @@ defmodule Moby.Victory do
     |> won()
   end
 
-  @spec score_player(Player.t()) :: {Player.t(), pos_integer}
-  def score_player(player = %Player{current_cards: [card]}) do
+  @spec score_card(Player.t()) :: {Player.t(), pos_integer}
+  def score_card(player = %Player{current_cards: [card]}) do
     {player, @card_values[card]}
   end
 
@@ -57,7 +57,7 @@ defmodule Moby.Victory do
   # TODO: handle tie?
   defp find_winner(game) do
     game.players
-    |> Enum.map(&score_player/1)
+    |> Enum.map(&score_card/1)
     |> Enum.max_by(fn {_, x} -> x end)
     |> remove_score()
   end

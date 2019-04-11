@@ -73,12 +73,12 @@ defmodule Moby.VictoryTest do
     # TODO: How to test this if won/1 exits?
   end
 
-  describe "score_player/1" do
+  describe "score_card/1" do
     test "scores the Princess" do
       player = %Player{current_cards: [:princess]}
       expected = {player, 8}
 
-      actual = score_player(player)
+      actual = score_card(player)
 
       assert actual == expected
     end
@@ -87,7 +87,7 @@ defmodule Moby.VictoryTest do
       player = %Player{current_cards: [:countess]}
       expected = {player, 7}
 
-      actual = score_player(player)
+      actual = score_card(player)
 
       assert actual == expected
     end
@@ -96,7 +96,7 @@ defmodule Moby.VictoryTest do
       player = %Player{current_cards: [:king]}
       expected = {player, 6}
 
-      actual = score_player(player)
+      actual = score_card(player)
 
       assert actual == expected
     end
@@ -105,7 +105,7 @@ defmodule Moby.VictoryTest do
       player = %Player{current_cards: [:prince]}
       expected = {player, 5}
 
-      actual = score_player(player)
+      actual = score_card(player)
 
       assert actual == expected
     end
@@ -114,7 +114,7 @@ defmodule Moby.VictoryTest do
       player = %Player{current_cards: [:handmaid]}
       expected = {player, 4}
 
-      actual = score_player(player)
+      actual = score_card(player)
 
       assert actual == expected
     end
@@ -123,7 +123,7 @@ defmodule Moby.VictoryTest do
       player = %Player{current_cards: [:baron]}
       expected = {player, 3}
 
-      actual = score_player(player)
+      actual = score_card(player)
 
       assert actual == expected
     end
@@ -132,7 +132,7 @@ defmodule Moby.VictoryTest do
       player = %Player{current_cards: [:priest]}
       expected = {player, 2}
 
-      actual = score_player(player)
+      actual = score_card(player)
 
       assert actual == expected
     end
@@ -141,7 +141,7 @@ defmodule Moby.VictoryTest do
       player = %Player{current_cards: [:guard]}
       expected = {player, 1}
 
-      actual = score_player(player)
+      actual = score_card(player)
 
       assert actual == expected
     end
