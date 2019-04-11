@@ -4,7 +4,7 @@ defmodule Moby.Baron do
   @spec play(GameState.t()) :: GameState.t()
   def play(game) do
     [hd(game.players), game.target_player]
-    |> Enum.map(&Victory.player_score/1)
+    |> Enum.map(&Victory.score_player/1)
     |> do_winner(game)
   end
 
