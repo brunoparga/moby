@@ -24,7 +24,11 @@ Keeping track of Tokens of Affection
 
 Testing all characters (except the Priest)
 
+Testing the game mechanics for a single round
+
 ### TO DO
+
+Multi-round play
 
 Adding a third and fourth player
 
