@@ -1,11 +1,16 @@
 defmodule Moby.Application do
   use Application
+  @supervisor_name GameStarter
 
   def start(_type, _args) do
-    import Supervisor.Spec
-    children = [worker(Moby.Server, [])]
-    # TODO: replace :simple_one_for_one with DynamicSupervisor
-    options = [name: Moby.Supervisor, strategy: :simple_one_for_one]
-    Supervisor.start_link(children, options)
+    supervisor_spec = [
+      {DynamicSupervisor, strategy: :one_for_one, name: @supervisor_name}
+    ]
+
+    Supervisor.start_link(supervisor_spec, strategy: :one_for_one)
+  end
+
+  def start_game do
+    DynamicSupervisor.start_child(@supervisor_name, {Moby.Server, nil})
   end
 end

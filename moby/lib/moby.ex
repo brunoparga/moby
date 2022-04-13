@@ -19,7 +19,7 @@ defmodule Moby do
   """
   @spec new_game() :: pid
   def new_game() do
-    {:ok, pid} = Supervisor.start_child(Moby.Supervisor, [])
+    {:ok, pid} = Moby.Application.start_game()
     pid
   end
 
