@@ -3,12 +3,12 @@ defmodule Moby.Server do
 
   alias Moby.GameFlow
 
-  def start_link(_args) do
-    GenServer.start_link(__MODULE__, nil)
+  def start_link(player_names) do
+    GenServer.start_link(__MODULE__, player_names)
   end
 
-  def init(_) do
-    {:ok, GameFlow.new_game()}
+  def init(player_names) do
+    {:ok, GameFlow.new_game(player_names)}
   end
 
   def handle_call({:game_state}, _from, game) do

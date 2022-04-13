@@ -10,7 +10,7 @@ defmodule Moby.Application do
     Supervisor.start_link(supervisor_spec, strategy: :one_for_one)
   end
 
-  def start_game do
-    DynamicSupervisor.start_child(@supervisor_name, Moby.Server)
+  def start_game(player_names) do
+    DynamicSupervisor.start_child(@supervisor_name, {Moby.Server, player_names})
   end
 end

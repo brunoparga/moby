@@ -16,9 +16,9 @@ defmodule Moby do
   @doc """
   Start a game in the server, return the corresponding pid.
   """
-  @spec new_game() :: pid
-  def new_game() do
-    {:ok, pid} = Moby.Application.start_game()
+  @spec new_game(list(String.t())) :: pid
+  def new_game(player_names) do
+    {:ok, pid} = Moby.Application.start_game(player_names)
     pid
   end
 
@@ -40,8 +40,6 @@ defmodule Moby do
   # TODO: validate that the player making the move is the one who's up to play
   @spec make_move(pid, move()) :: GameState.t()
   def make_move(game_pid, move) do
-    # GenServer.call(game_pid, {:make_move, move})
-    # TODO: Uncomment the line above and delete the below - this is just for testing!!!
-    GenServer.call(game_pid, {:make_move, move}, 86_400)
+    GenServer.call(game_pid, {:make_move, move})
   end
 end

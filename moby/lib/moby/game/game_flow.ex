@@ -9,9 +9,10 @@ defmodule Moby.GameFlow do
   Sets up the game for the first player to play. If they must play the Countess,
   they do so and the turn passes to the next player.
   """
-  @spec new_game() :: GameState.t()
-  def new_game() do
-    GameState.initialize() |> Moby.Countess.check()
+  @spec new_game(list(String.t())) :: GameState.t()
+  def new_game(player_names) do
+    GameState.initialize(player_names)
+    |> Moby.Countess.check()
   end
 
   @doc """

@@ -7,7 +7,7 @@ defmodule Moby.Test do
   Starts a game and keeps prompting the player for a move, which is executed.
   """
   def test do
-    Moby.new_game()
+    Moby.new_game(["Joe", "Ann"])
     |> make_move()
   end
 

@@ -25,12 +25,14 @@ defmodule Moby.GameState do
   @spec state(t) :: t
   def state(game), do: game
 
-  @spec initialize() :: t
-  def initialize() do
-    [removed, player1_1, player1_2, player2 | deck] = shuffle_deck()
-    joe = %Player{name: "Joe", current_cards: [player1_1, player1_2]}
-    ann = %Player{name: "Ann", current_cards: [player2]}
-    %__MODULE__{players: [joe, ann], deck: deck, removed_card: removed}
+  @spec initialize(list(String.t())) :: t
+  def initialize([player1_name, player2_name | _tail]) do
+    # TODO: improve dealing cards (in a separate function)
+    # TODO: ensure 2, 3 or 4 people can play
+    [removed_card, player1_first_card, player1_second_card, player2_card | deck] = shuffle_deck()
+    player1 = %Player{name: player1_name, current_cards: [player1_first_card, player1_second_card]}
+    player2 = %Player{name: player2_name, current_cards: [player2_card]}
+    %__MODULE__{players: [player1, player2], deck: deck, removed_card: removed_card}
   end
 
   @spec set_move(t, Moby.move()) :: t
