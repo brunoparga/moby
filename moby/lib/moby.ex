@@ -15,7 +15,6 @@ defmodule Moby do
 
   @doc """
   Start a game in the server, return the corresponding pid.
-  TODO: change the supervision structure to match Tic-tac-toe
   """
   @spec new_game() :: pid
   def new_game() do

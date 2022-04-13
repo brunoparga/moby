@@ -11,6 +11,6 @@ defmodule Moby.Application do
   end
 
   def start_game do
-    DynamicSupervisor.start_child(@supervisor_name, {Moby.Server, nil})
+    DynamicSupervisor.start_child(@supervisor_name, Moby.Server)
   end
 end
