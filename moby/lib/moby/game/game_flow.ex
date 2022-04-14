@@ -3,7 +3,7 @@ defmodule Moby.GameFlow do
   Contains functions necessary to operate a Love Letter game.
   """
 
-  alias Moby.{Action, GameState, Victory}
+  alias Moby.{Action, GameState, Types, Victory}
 
   @doc """
   Sets up the game for the first player to play. If they must play the Countess,
@@ -19,7 +19,7 @@ defmodule Moby.GameFlow do
   @doc """
   Inserts the move into the game state and checks if it's a valid move.
   """
-  @spec make_move(GameState.t(), Moby.move()) :: GameState.t() | no_return
+  @spec make_move(GameState.t(), Types.move()) :: GameState.t() | no_return
   def make_move(game, move) do
     game
     |> GameState.set_move(move)
@@ -38,7 +38,7 @@ defmodule Moby.GameFlow do
   def continue(game) do
     game
     |> update_order()
-    |> next()
+    |> next_player()
   end
 
   @spec reset_move(GameState.t()) :: GameState.t()
@@ -52,8 +52,8 @@ defmodule Moby.GameFlow do
     %GameState{game | players: new_order}
   end
 
-  @spec next(GameState.t()) :: GameState.t()
-  defp next(game) do
+  @spec next_player(GameState.t()) :: GameState.t()
+  defp next_player(game) do
     [drawn_card | new_deck] = game.deck
 
     Action.execute_current(game, {Action, :draw_card, [drawn_card]})

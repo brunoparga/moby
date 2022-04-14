@@ -1,5 +1,6 @@
 defmodule Moby.Application do
   use Application
+
   @supervisor_name GameStarter
 
   def start(_type, _args) do

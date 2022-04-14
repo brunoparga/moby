@@ -3,13 +3,12 @@ defmodule Moby.Player do
   Represents a Love Letter player.
   """
 
-  alias Moby.GameState
+  alias Moby.{GameState, Types}
 
-  @type cards :: [atom]
   @type t :: %__MODULE__{
           name: String.t(),
-          current_cards: cards,
-          played_cards: cards,
+          current_cards: [Types.card()],
+          played_cards: [Types.card()],
           active?: boolean,
           protected?: boolean
         }
@@ -22,7 +21,7 @@ defmodule Moby.Player do
 
   # TODO: include score key in the struct, once many-round play is implemented
 
-  @spec find(GameState.t(), String.t()) :: __MODULE__.t()
+  @spec find(GameState.t(), String.t()) :: t()
   def find(game, player_name) do
     Enum.find(game.players, fn x -> x.name == player_name end)
   end

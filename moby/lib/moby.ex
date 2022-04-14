@@ -3,15 +3,9 @@ defmodule Moby do
   Implements a clone of the card game "Love Letter" by Z-Man Games.
   """
 
-  alias Moby.GameState
+  alias Moby.{GameState, Types}
 
   defdelegate test, to: Moby.Test
-
-  @type move() :: %{
-          required(:played_card) => atom,
-          optional(:target) => String.t(),
-          optional(:named_card) => atom
-        }
 
   @doc """
   Start a game in the server, return the corresponding pid.
@@ -38,7 +32,7 @@ defmodule Moby do
   the target name is a string.
   """
   # TODO: validate that the player making the move is the one who's up to play
-  @spec make_move(pid, move()) :: GameState.t()
+  @spec make_move(pid, Types.move()) :: GameState.t()
   def make_move(game_pid, move) do
     GenServer.call(game_pid, {:make_move, move})
   end

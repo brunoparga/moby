@@ -3,14 +3,14 @@ defmodule Moby.GameState do
   Represents a Love Letter game.
   """
 
-  alias Moby.Player
+  alias Moby.{Player, Types}
 
   @type t :: %__MODULE__{
           players: [Player.t()],
           winner: nil | Player.t(),
-          deck: [atom],
-          removed_card: atom,
-          latest_move: nil | Moby.move(),
+          deck: [Types.card()],
+          removed_card: Types.card(),
+          latest_move: nil | Types.move(),
           target_player: nil | Player.t()
         }
 
@@ -40,7 +40,7 @@ defmodule Moby.GameState do
     %__MODULE__{players: [player1, player2], deck: deck, removed_card: removed_card}
   end
 
-  @spec set_move(t, Moby.move()) :: t
+  @spec set_move(t, Types.move()) :: t
   def set_move(game, move) do
     Moby.Handmaid.end_own_protection(game)
     |> Map.put(:latest_move, move)

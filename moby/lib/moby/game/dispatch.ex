@@ -3,7 +3,7 @@ defmodule Moby.Dispatch do
   Functions that call the appropriate actions for the card being played.
   """
 
-  alias Moby.{Action, GameState}
+  alias Moby.{Action, GameState, Types}
 
   @doc """
   Make the given move: play a card, targetting one player (except for the
@@ -32,7 +32,7 @@ defmodule Moby.Dispatch do
     |> apply(:play, [game])
   end
 
-  @spec modulize_card(atom) :: atom
+  @spec modulize_card(Types.card()) :: atom
   defp modulize_card(card) do
     card
     |> Atom.to_string()

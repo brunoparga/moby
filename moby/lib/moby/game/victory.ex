@@ -1,7 +1,7 @@
 defmodule Moby.Victory do
   @moduledoc """
   Functions related to a player winning a round.
-  TODO: round victory
+  TODO: full-game victory (multi-round play)
   """
 
   alias Moby.{GameState, Player}

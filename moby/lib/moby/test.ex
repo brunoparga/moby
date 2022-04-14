@@ -3,9 +3,7 @@ defmodule Moby.Test do
   Automate running the game.
   """
 
-  @valid_cards ~w[baron countess guard handmaid king priest prince princess]a
-  @nontargeted_cards ~w[princess countess handmaid]a
-  @targeted_cards ~w[king prince baron priest]a
+  import Moby.Types
 
   @doc """
   Starts a game and keeps prompting the player for a move, which is executed.
@@ -26,10 +24,10 @@ defmodule Moby.Test do
         target = get_target()
         play_guard(game, target)
 
-      card in @targeted_cards ->
+      card in targeted_cards() ->
         Moby.make_move(game, %{played_card: card, target: get_target()})
 
-      card in @nontargeted_cards ->
+      card in nontargeted_cards() ->
         Moby.make_move(game, %{played_card: card})
     end
 
@@ -53,6 +51,6 @@ defmodule Moby.Test do
 
   defp get_card(prompt) do
     card = IO.gets(prompt) |> String.trim() |> String.to_atom()
-    if card in @valid_cards, do: card, else: get_card("Invalid card. " <> prompt)
+    if card in valid_cards(), do: card, else: get_card("Invalid card. " <> prompt)
   end
 end
