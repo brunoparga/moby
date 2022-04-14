@@ -30,7 +30,12 @@ defmodule Moby.GameState do
     # TODO: improve dealing cards (in a separate function)
     # TODO: ensure 2, 3 or 4 people can play
     [removed_card, player1_first_card, player1_second_card, player2_card | deck] = shuffle_deck()
-    player1 = %Player{name: player1_name, current_cards: [player1_first_card, player1_second_card]}
+
+    player1 = %Player{
+      name: player1_name,
+      current_cards: [player1_first_card, player1_second_card]
+    }
+
     player2 = %Player{name: player2_name, current_cards: [player2_card]}
     %__MODULE__{players: [player1, player2], deck: deck, removed_card: removed_card}
   end

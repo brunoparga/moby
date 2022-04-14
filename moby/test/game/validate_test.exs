@@ -74,11 +74,11 @@ defmodule Moby.ValidateTest do
         }
         |> GameState.set_move(%{played_card: :princess})
 
-        expected = %GameState{game | latest_move: nil, target_player: nil}
+      expected = %GameState{game | latest_move: nil, target_player: nil}
 
-        actual = Validate.validate(game)
+      actual = Validate.validate(game)
 
-        assert actual == expected
+      assert actual == expected
     end
 
     test "an invalid game (target is out of the round) is reset" do
@@ -95,11 +95,11 @@ defmodule Moby.ValidateTest do
         }
         |> GameState.set_move(%{played_card: :baron, target: "Ann"})
 
-        expected = %GameState{game | latest_move: nil, target_player: nil}
+      expected = %GameState{game | latest_move: nil, target_player: nil}
 
-        actual = Validate.validate(game)
+      actual = Validate.validate(game)
 
-        assert actual == expected
+      assert actual == expected
     end
 
     test "an invalid game (violates Lonely Prince constraint) is reset" do
@@ -116,11 +116,11 @@ defmodule Moby.ValidateTest do
         }
         |> GameState.set_move(%{played_card: :prince, target: "Ann"})
 
-        expected = %GameState{game | latest_move: nil, target_player: nil}
+      expected = %GameState{game | latest_move: nil, target_player: nil}
 
-        actual = Validate.validate(game)
+      actual = Validate.validate(game)
 
-        assert actual == expected
+      assert actual == expected
     end
   end
 end
