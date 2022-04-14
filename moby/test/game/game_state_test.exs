@@ -5,17 +5,20 @@ defmodule Moby.GameStateTest do
 
   describe "state/1" do
     test "just returns its argument" do
-      game = GameState.initialize()
+      game = GameState.initialize(["Joe", "Ann"])
 
       assert GameState.state(game) == game
+      # TODO: fail this test. The function should do something else
+      # when called with anything that is not a game.
       assert GameState.state(42) == 42
     end
   end
 
-  describe "initialize/0" do
+  describe "initialize/1" do
     test "starts a new game" do
-      actual = GameState.initialize()
+      actual = GameState.initialize(["Joe", "Ann"])
 
+      # Yoda assertion used for pattern matching on the random cards that were dealt
       assert %GameState{
                players: [
                  %Player{name: "Joe", current_cards: joe_current_cards},

@@ -5,8 +5,8 @@ defmodule Moby.GameFlowTest do
 
   alias Moby.{GameState, Player}
 
-  describe "new_game/0" do
-    # This is just a composition of GameState.initialize/0 and Countess.check/1.
+  describe "new_game/1" do
+    # This is just a composition of GameState.initialize/1 and Countess.check/1.
     # Please refer to the tests for those functions.
   end
 
@@ -64,7 +64,7 @@ defmodule Moby.GameFlowTest do
 
   describe "reset_move/1" do
     test "clears the game's latest move and target player fields" do
-      game = expected = GameState.initialize()
+      game = expected = GameState.initialize(["Joe", "Ann"])
       temp = GameState.set_move(game, %{played_card: :priest, target: "Ann"})
 
       actual = reset_move(temp)

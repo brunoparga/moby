@@ -56,14 +56,14 @@ defmodule Moby.VictoryTest do
 
   describe "won/1" do
     test "exits when called on a game with a winner" do
-      game = GameState.initialize()
+      game = GameState.initialize(["Joe", "Ann"])
       game = Map.put(game, :winner, hd(tl(game.players)))
 
       catch_exit(won(game) == :normal)
     end
 
     test "fails when called on a game without a winner" do
-      game = GameState.initialize()
+      game = GameState.initialize(["Joe", "Ann"])
 
       catch_error(won(game))
     end
