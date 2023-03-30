@@ -1,6 +1,9 @@
 # Moby-Letty
 
-A clone of Z-Man Games' "Love Letter".
+A clone of Z-Man Games' "Love Letter". Run `mix manual_test` to "play" a
+version of the game on the terminal. There are only two players (when the
+actual game plays up to 4), both share the same terminal and the full state
+of the game is shown. But it works!
 
 ## Development roadmap
 
