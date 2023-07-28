@@ -8,7 +8,7 @@ defmodule Mix.Tasks.ManualTest do
   @shortdoc "Plays Love Letter in the terminal"
   def run(_args) do
     Mix.Task.run("app.start")
-    IO.puts(rules)
+    IO.puts(rules())
     Moby.test()
   end
 
