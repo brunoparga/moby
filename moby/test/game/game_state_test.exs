@@ -4,13 +4,23 @@ defmodule Moby.GameStateTest do
   alias Moby.{GameState, Player}
 
   describe "state/1" do
-    test "just returns its argument" do
-      game = GameState.initialize(["Joe", "Ann"])
+    test "returns what the current player can see" do
+      game = %GameState{players: [joe, ann]} = GameState.initialize(["Joe", "Ann"])
 
-      assert GameState.state(game) == game
-      # TODO: fail this test. The function should do something else
-      # when called with anything that is not a game.
-      assert GameState.state(42) == 42
+      expected_ann =
+        ann
+        |> Map.from_struct()
+        |> Map.delete(:current_cards)
+
+      game_for_joe =
+        game
+        |> Map.from_struct()
+        |> Map.put(:players, [joe, expected_ann])
+        |> Map.drop([:winner, :deck, :removed_card])
+        |> Map.put(:up_to_play?, true)
+
+      assert GameState.state(game) == game_for_joe
+      assert catch_error(GameState.state(42))
     end
   end
 

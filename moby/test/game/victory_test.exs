@@ -70,7 +70,7 @@ defmodule Moby.VictoryTest do
   end
 
   describe "round_over/1" do
-    # TODO: How to test this if won/1 exits?
+    # TODO: How to test this if won/1 exits? Answer: catch_exit/1
   end
 
   describe "score_card/1" do
