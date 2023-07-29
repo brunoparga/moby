@@ -59,18 +59,29 @@ defmodule Moby.VictoryTest do
       game = GameState.initialize(["Joe", "Ann"])
       game = Map.put(game, :winner, hd(tl(game.players)))
 
-      catch_exit(won(game) == :normal)
+      assert catch_exit(won(game) == :normal)
     end
 
     test "fails when called on a game without a winner" do
       game = GameState.initialize(["Joe", "Ann"])
 
-      catch_error(won(game))
+      assert catch_error(won(game))
     end
   end
 
   describe "round_over/1" do
-    # TODO: How to test this if won/1 exits? Answer: catch_exit/1
+    test "finds a winner and exits" do
+      game = GameState.initialize(["Joe", "Ann"])
+      [joe, ann] = game.players
+
+      discarded_joe =
+        joe
+        |> Map.update!(:current_cards, &[hd(&1)])
+
+      game = Map.put(game, :players, [discarded_joe, ann])
+
+      assert catch_exit(round_over(game) == :normal)
+    end
   end
 
   describe "score_card/1" do
