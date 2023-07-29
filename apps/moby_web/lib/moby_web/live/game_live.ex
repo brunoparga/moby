@@ -2,19 +2,18 @@ defmodule MobyWeb.GameLive do
   use MobyWeb, :live_view
 
   def mount(_params, _session, socket) do
-    socket = assign(socket, players: ["Fonk", "Tunts"], game_pid: nil)
-    {:ok, socket, layout: false}
+    socket =
+      socket
+      |> assign(game_pid: nil)
+      |> assign(players: [])
+      |> assign(form: to_form(%{"player" => ""}))
+
+    {:ok, socket}
   end
 
-  def render(assigns) do
-    ~H"""
-    <h1>Love Letter</h1>
-    <p>Players: <%= @players %></p>
-    <button phx-click="submit">Submit</button>
-    <%= if @game_pid do %>
-      <p>Game pid: <%= :erlang.pid_to_list(@game_pid) %></p>
-    <% end %>
-    """
+  def handle_event("add_player", params, socket) do
+    players = socket.assigns.players ++ [params["player"]]
+    {:noreply, assign(socket, :players, players)}
   end
 
   def handle_event("submit", _params, socket) do

@@ -1,0 +1,17 @@
+<span>Players:</span>
+<%= for player <- @players do %>
+  <p><%= player %></p>
+<% end %>
+<.simple_form for={@form} phx-submit="add_player">
+  <div class="flex">
+    <.label for="player">Name:</.label>
+    <.input type="text" class="grow" name="player" field={@form["player"]} />
+  </div>
+  <:actions>
+    <button>Add player</button>
+  </:actions>
+</.simple_form>
+<button phx-click="submit">Create game</button>
+<%= if @game_pid do %>
+  <p>Game pid: <%= :erlang.pid_to_list(@game_pid) %></p>
+<% end %>
