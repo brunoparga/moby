@@ -29,6 +29,7 @@ Testing all characters (except the Priest)
 
 Testing the game mechanics for a single round
 
+Separating the info that gets sent to each player
 ### TO DO
 
 Multi-round play
@@ -37,7 +38,6 @@ Adding a third and fourth player
 
 Extracting the text client
 
-Separating the info that gets sent to each player
 
 Implementing and testing the Priest
 
