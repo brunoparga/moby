@@ -36,17 +36,8 @@ defmodule Moby.GameState do
   @spec initialize(list(String.t())) :: t
   def initialize(player_names) do
     {removed_card, deck} = deal_card(shuffle_deck())
-
-    {players, deck} = Enum.map_reduce(player_names, deck, fn name, deck ->
-      {card, deck} = deal_card(deck)
-      {%Player{name: name, current_cards: [card]}, deck}
-    end)
-
-    {next_card, deck} = deal_card(deck)
-    [first_player | rest] = players
-    first_player_cards = first_player.current_cards ++ [next_card]
-    first_player = %Player{first_player | current_cards: first_player_cards}
-    players = [first_player | rest]
+    {players, deck} = initialize_players(player_names, deck)
+    {players, deck} = deal_first_card(players, deck)
 
     %__MODULE__{players: players, deck: deck, removed_card: removed_card}
   end
@@ -56,6 +47,24 @@ defmodule Moby.GameState do
     Moby.Handmaid.end_own_protection(game)
     |> Map.put(:latest_move, move)
     |> set_target()
+  end
+
+  @spec initialize_players(list(String.t()), list(atom)) :: {list(Player.t()), list(atom)}
+  defp initialize_players(player_names, deck) do
+    Enum.map_reduce(player_names, deck, fn name, deck ->
+      {card, deck} = deal_card(deck)
+      {%Player{name: name, current_cards: [card]}, deck}
+    end)
+  end
+
+  defp deal_first_card(players, deck) do
+    {next_card, deck} = deal_card(deck)
+
+    [first_player | rest] = players
+    first_player_cards = first_player.current_cards ++ [next_card]
+    first_player = %Player{first_player | current_cards: first_player_cards}
+
+    {[first_player | rest], deck}
   end
 
   @spec shuffle_deck() :: [atom]

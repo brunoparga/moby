@@ -23,21 +23,21 @@ Prince)
 There is a very basic text interface, currently embedded within the server
 application
 
-Keeping track of Tokens of Affection
-
 Testing all characters (except the Priest)
 
 Testing the game mechanics for a single round
 
 Separating the info that gets sent to each player
-### TO DO
-
-Multi-round play
 
 Adding a third and fourth player
 
-Extracting the text client
+### TO DO
 
+Keeping track of Tokens of Affection
+
+Multi-round play
+
+Extracting the text client
 
 Implementing and testing the Priest
 
