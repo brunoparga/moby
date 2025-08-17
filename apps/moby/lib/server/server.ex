@@ -12,12 +12,14 @@ defmodule Moby.Server do
   end
 
   def handle_call({:game_state}, _from, game) do
-    # TODO: currently it is assumed that the player up to play calls this function.
-    # I need to see if this assumption is correct.
-    # The structure of the "from" parameter is:
-    # from: {#PID<0.99.0>, [:alias | #Reference<0.0.12675.2801004649.2553610241.152459>]}
-    # but I might just go with the name (the pid can (will??) change)
-    {:reply, Moby.GameState.state(game), game}
+    {:reply, game, game}
+  end
+
+  def handle_call({:state_for_player, player_name}, _from, game) do
+    # TODO: get the player from the `from` parameter, so this call
+    # cannot be spoofed by other players.
+    player = Moby.Player.find(game, player_name)
+    {:reply, Moby.GameState.state(game, player), game}
   end
 
   def handle_call({:make_move, move}, _from, game) do

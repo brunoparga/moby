@@ -21,11 +21,6 @@ defmodule Moby.GameState do
             latest_move: nil,
             target_player: nil
 
-  @spec state(t) :: t
-  def state(game = %__MODULE__{players: [active_player | _other_players]}) do
-    state(game, active_player)
-  end
-
   @doc """
   Return a map that shows only what the given player can see.
   """
