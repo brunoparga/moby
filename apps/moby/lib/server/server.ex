@@ -22,6 +22,10 @@ defmodule Moby.Server do
     {:reply, Moby.GameState.state(game, player), game}
   end
 
+  def handle_call({:state_for_player_one}, _from, game) do
+    {:reply, Moby.GameState.state(game, hd(game.players)), game}
+  end
+
   def handle_call({:make_move, move}, _from, game) do
     game = GameFlow.make_move(game, move)
     {:reply, game, game}

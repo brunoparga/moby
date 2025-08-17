@@ -9,12 +9,12 @@ defmodule Moby.Test do
   Starts a game and keeps prompting the player for a move, which is executed.
   """
   def test do
-    Moby.new_game(["Joe", "Ann"])
+    Moby.new_game(["Fonk", "Tunts", "Blargh", "Zoid"])
     |> play_game()
   end
 
   defp play_game(game) do
-    Moby.game_state(game)
+    Moby.state_for_player_one(game)
     |> IO.inspect()
 
     card = get_card("Choose a card: ")

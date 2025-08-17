@@ -49,7 +49,13 @@ defmodule Moby.GameFlow do
   @spec update_order(GameState.t()) :: GameState.t()
   defp update_order(game) do
     new_order = tl(game.players) ++ [hd(game.players)]
-    %GameState{game | players: new_order}
+    new_game = %GameState{game | players: new_order}
+
+    if hd(new_game.players).active? do
+      new_game
+    else
+      update_order(new_game)
+    end
   end
 
   @spec next_player(GameState.t()) :: GameState.t()

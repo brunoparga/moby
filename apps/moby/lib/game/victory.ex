@@ -57,6 +57,7 @@ defmodule Moby.Victory do
   # TODO: handle tie?
   defp find_winner(game) do
     game.players
+    |> Enum.filter(fn player -> player.active? end)
     |> Enum.map(&score_card/1)
     |> Enum.max_by(fn {_, x} -> x end)
     |> remove_score()

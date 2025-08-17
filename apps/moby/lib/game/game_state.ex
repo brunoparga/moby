@@ -34,18 +34,21 @@ defmodule Moby.GameState do
   end
 
   @spec initialize(list(String.t())) :: t
-  def initialize([player1_name, player2_name | _tail]) do
-    # TODO: improve dealing cards (in a separate function)
-    # TODO: ensure 2, 3 or 4 people can play
-    [removed_card, player1_first_card, player1_second_card, player2_card | deck] = shuffle_deck()
+  def initialize(player_names) do
+    {removed_card, deck} = deal_card(shuffle_deck())
 
-    player1 = %Player{
-      name: player1_name,
-      current_cards: [player1_first_card, player1_second_card]
-    }
+    {players, deck} = Enum.map_reduce(player_names, deck, fn name, deck ->
+      {card, deck} = deal_card(deck)
+      {%Player{name: name, current_cards: [card]}, deck}
+    end)
 
-    player2 = %Player{name: player2_name, current_cards: [player2_card]}
-    %__MODULE__{players: [player1, player2], deck: deck, removed_card: removed_card}
+    {next_card, deck} = deal_card(deck)
+    [first_player | rest] = players
+    first_player_cards = first_player.current_cards ++ [next_card]
+    first_player = %Player{first_player | current_cards: first_player_cards}
+    players = [first_player | rest]
+
+    %__MODULE__{players: players, deck: deck, removed_card: removed_card}
   end
 
   @spec set_move(t, Types.move()) :: t
@@ -60,6 +63,12 @@ defmodule Moby.GameState do
     ~w[princess countess king prince prince handmaid handmaid
        baron baron priest priest guard guard guard guard guard]a
     |> Enum.shuffle()
+  end
+
+  @spec deal_card(list(atom)) :: {atom, list(atom)}
+  defp deal_card(deck) do
+    [card | new_deck] = deck
+    {card, new_deck}
   end
 
   @spec hide_players([Player.t()], Player.t()) :: [Types.any_player()]
