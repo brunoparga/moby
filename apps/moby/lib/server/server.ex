@@ -19,11 +19,11 @@ defmodule Moby.Server do
     # TODO: get the player from the `from` parameter, so this call
     # cannot be spoofed by other players.
     player = Moby.Player.find(game, player_name)
-    {:reply, Moby.GameState.state_for_player(game, player), game}
+    {:reply, Moby.Display.state_for_player(game, player), game}
   end
 
   def handle_call({:state_for_player_one}, _from, game) do
-    {:reply, Moby.GameState.state_for_player(game, hd(game.players)), game}
+    {:reply, Moby.Display.state_for_player(game, hd(game.players)), game}
   end
 
   def handle_call({:make_move, move}, _from, game) do
