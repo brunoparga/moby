@@ -45,13 +45,12 @@ defmodule Moby.Action do
   # Card-playing actions
 
   @spec play_card(Player.t(), atom) :: Player.t()
-  def play_card(player, played_card) do
-    player =
-      player
-      |> remove_from_hand(played_card)
-      |> add_to_discarded(played_card)
+  def play_card(player, :princess), do: lose(player)
 
-    if played_card == :princess, do: lose(player), else: player
+  def play_card(player, played_card) do
+    player
+    |> remove_from_hand(played_card)
+    |> add_to_discarded(played_card)
   end
 
   @spec draw_card(Player.t(), atom) :: Player.t()
@@ -61,12 +60,17 @@ defmodule Moby.Action do
 
   @spec lose(Player.t()) :: Player.t()
   def lose(player) do
-    # TODO: refactor this to use play_card
+    current_cards =
+      case player.current_cards do
+        [other_card, :princess] -> [:princess, other_card]
+        _ -> player.current_cards
+      end
+
     %Player{
       player
       | active?: false,
         current_cards: [],
-        played_cards: player.played_cards ++ player.current_cards
+        played_cards: player.played_cards ++ current_cards
     }
   end
 

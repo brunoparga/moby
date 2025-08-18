@@ -3,7 +3,7 @@ defmodule Moby.GameStateTest do
 
   alias Moby.{GameState, Player}
 
-  describe "state/1" do
+  describe "state_for_player/1" do
     test "returns what the current player can see" do
       game = %GameState{players: [joe, ann]} = GameState.initialize(["Joe", "Ann"])
 
@@ -16,11 +16,23 @@ defmodule Moby.GameStateTest do
         game
         |> Map.from_struct()
         |> Map.put(:players, [joe, expected_ann])
-        |> Map.drop([:winner, :deck, :removed_card])
+        |> Map.drop(~w[winner deck removed_card latest_move target_player]a)
         |> Map.put(:up_to_play?, true)
 
-      assert GameState.state(game) == game_for_joe
-      assert catch_error(GameState.state(42))
+      expected_joe =
+        joe
+        |> Map.from_struct()
+        |> Map.delete(:current_cards)
+
+      game_for_ann =
+        game
+        |> Map.from_struct()
+        |> Map.put(:players, [expected_joe, ann])
+        |> Map.drop(~w[winner deck removed_card latest_move target_player]a)
+        |> Map.put(:up_to_play?, false)
+
+      assert GameState.state_for_player(game, joe) == game_for_joe
+      assert GameState.state_for_player(game, ann) == game_for_ann
     end
   end
 
@@ -35,7 +47,8 @@ defmodule Moby.GameStateTest do
                  %Player{name: "Ann", current_cards: ann_current_cards}
                ],
                deck: deck,
-               removed_card: removed_card
+               removed_card: removed_card,
+               face_up_cards: face_up_cards
              } = actual
 
       sorted_deck = ~w[baron baron countess guard guard guard guard guard handmaid
@@ -45,6 +58,7 @@ defmodule Moby.GameStateTest do
         (joe_current_cards ++
            ann_current_cards ++
            deck ++
+           face_up_cards ++
            [removed_card])
         |> Enum.sort()
 

@@ -11,42 +11,57 @@ defmodule Moby.GameState do
           deck: [Types.card()],
           removed_card: Types.card(),
           latest_move: nil | Types.move(),
-          target_player: nil | Player.t()
+          target_player: nil | Player.t(),
+          face_up_cards: [Types.card()]
         }
 
-  defstruct players: [%Player{}, %Player{}],
+  defstruct players: [],
             winner: nil,
             deck: [],
             removed_card: nil,
             latest_move: nil,
-            target_player: nil
+            target_player: nil,
+            face_up_cards: []
 
   @doc """
-  Return a map that shows only what the given player can see.
+  Initialize a new game with the given player names.
   """
-  @spec state(t, Player.t()) :: Types.discreet_game()
-  def state(game, requester) do
-    game
-    |> Map.from_struct()
-    |> Map.update!(:players, &hide_players(&1, requester))
-    |> Map.drop([:winner, :deck, :removed_card])
-    |> Map.put(:up_to_play?, requester == hd(game.players))
-  end
-
   @spec initialize(list(String.t())) :: t
   def initialize(player_names) do
     {removed_card, deck} = deal_card(shuffle_deck())
+    {face_up_cards, deck} = face_up_cards(player_names, deck)
     {players, deck} = initialize_players(player_names, deck)
     {players, deck} = deal_first_card(players, deck)
 
-    %__MODULE__{players: players, deck: deck, removed_card: removed_card}
+    %__MODULE__{
+      players: players,
+      deck: deck,
+      removed_card: removed_card,
+      face_up_cards: face_up_cards
+    }
   end
 
+  @doc """
+  Updates the game state with the latest move made.
+  Processing of the outcomes of the move happens elsewhere.
+  """
   @spec set_move(t, Types.move()) :: t
   def set_move(game, move) do
     Moby.Handmaid.end_own_protection(game)
     |> Map.put(:latest_move, move)
     |> set_target()
+  end
+
+  @doc """
+  Return a map that shows only what the given player can see.
+  """
+  @spec state_for_player(t, Player.t()) :: Types.discreet_game()
+  def state_for_player(game, requester) do
+    game
+    |> Map.from_struct()
+    |> Map.update!(:players, &hide_players(&1, requester))
+    |> Map.drop(~w[winner deck removed_card latest_move target_player]a)
+    |> Map.put(:up_to_play?, requester == hd(game.players))
   end
 
   @spec initialize_players(list(String.t()), list(atom)) :: {list(Player.t()), list(atom)}
@@ -57,6 +72,15 @@ defmodule Moby.GameState do
     end)
   end
 
+  @spec face_up_cards(list(String.t()), list(atom)) :: {list(atom), list(atom)}
+  defp face_up_cards(player_names, deck) when length(player_names) == 2 do
+    [first_card, second_card, third_card | new_deck] = deck
+    {[first_card, second_card, third_card], new_deck}
+  end
+
+  defp face_up_cards(_too_many_players, deck), do: {[], deck}
+
+  @spec deal_first_card(list(Player.t()), list(atom)) :: {list(Player.t()), list(atom)}
   defp deal_first_card(players, deck) do
     {next_card, deck} = deal_card(deck)
 
@@ -82,8 +106,9 @@ defmodule Moby.GameState do
 
   @spec hide_players([Player.t()], Player.t()) :: [Types.any_player()]
   defp hide_players(players, requester) do
-    other_players = List.delete(players, requester)
-    [requester | Enum.map(other_players, &hide_player/1)]
+    Enum.map(players, fn player ->
+      if player.name == requester.name, do: player, else: hide_player(player)
+    end)
   end
 
   @spec hide_player(Player.t()) :: Types.discreet_player()
