@@ -40,7 +40,7 @@ defmodule Moby do
   @doc """
   Returns the state of the game for the first player.
   """
-  @spec state_for_player_one(pid) :: GameState.t()
+  @spec state_for_player_one(pid) :: Types.discreet_game()
   def state_for_player_one(game_pid) do
     GenServer.call(game_pid, {:state_for_player_one})
   end
@@ -49,7 +49,7 @@ defmodule Moby do
   Returns the state of the game for the given player.
   TODO: reduce this to arity 1; the GenServer will find the player by their pid.
   """
-  @spec state_for_player(pid, String.t()) :: GameState.t()
+  @spec state_for_player(pid, String.t()) :: Types.discreet_game()
   def state_for_player(game_pid, player_name) do
     GenServer.call(game_pid, {:state_for_player, player_name})
   end

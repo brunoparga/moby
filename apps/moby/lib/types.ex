@@ -21,7 +21,7 @@ defmodule Moby.Types do
   @type discreet_game() :: %{
           players: [any_player()],
           up_to_play?: boolean(),
-          latest_move: nil | Types.move(),
+          latest_move: nil | move(),
           target_player: nil | Player.t()
         }
 

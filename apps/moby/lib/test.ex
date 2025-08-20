@@ -17,7 +17,7 @@ defmodule Moby.Test do
     Moby.state_for_player_one(game)
     |> IO.inspect()
 
-    card = get_card("Choose a card: ")
+    card = get_card("Choose a card (or 'exit'): ")
 
     cond do
       card == :guard ->
@@ -51,6 +51,17 @@ defmodule Moby.Test do
 
   defp get_card(prompt) do
     card = IO.gets(prompt) |> String.trim() |> String.to_atom()
-    if card in valid_cards(), do: card, else: get_card("Invalid card. " <> prompt)
+
+    cond do
+      card == :exit ->
+        IO.puts("Exiting...")
+        exit(:normal)
+
+      card in valid_cards() ->
+        card
+
+      true ->
+        get_card("Invalid card. " <> prompt)
+    end
   end
 end

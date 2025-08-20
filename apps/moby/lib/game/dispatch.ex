@@ -6,7 +6,7 @@ defmodule Moby.Dispatch do
   alias Moby.{Action, GameState, Types}
 
   @doc """
-  Make the given move: play a card, targetting one player (except for the
+  Make the given move: play a card, targeting one player (except for the
   Princess, Countess and Handmaid) and naming a card (for the Guard).
   """
   @spec move(GameState.t()) :: GameState.t()

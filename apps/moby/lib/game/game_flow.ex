@@ -11,7 +11,6 @@ defmodule Moby.GameFlow do
   """
   @spec new_game(list(String.t())) :: GameState.t()
   def new_game(player_names) do
-    # TODO: separate initial state of the game from first move
     GameState.initialize(player_names)
     |> Moby.Countess.check()
   end
