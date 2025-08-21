@@ -1,4 +1,5 @@
 defmodule Moby.CountessTest do
+  # TODO: Refactor this test to match the new countess rule validation
   use ExUnit.Case, async: true
 
   alias Moby.{GameState, Player}

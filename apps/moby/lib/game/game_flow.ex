@@ -6,13 +6,11 @@ defmodule Moby.GameFlow do
   alias Moby.{Action, GameState, Types, Victory}
 
   @doc """
-  Sets up the game for the first player to play. If they must play the Countess,
-  they do so and the turn passes to the next player.
+  Sets up the game for the first player to play.
   """
   @spec new_game(list(String.t())) :: GameState.t()
   def new_game(player_names) do
     GameState.initialize(player_names)
-    |> Moby.Countess.check()
   end
 
   @doc """
@@ -23,12 +21,10 @@ defmodule Moby.GameFlow do
     game
     |> GameState.set_move(move)
     |> Moby.Validate.validate()
-  end
-
-  def move_is_valid(game) do
-    game
-    |> Moby.Dispatch.move()
-    |> Victory.check()
+    |> then(fn
+      {true, valid_game} -> dispatch_move(valid_game)
+      {false, invalid_game} -> reset_move(invalid_game)
+    end)
   end
 
   @spec continue(GameState.t()) :: GameState.t()
@@ -43,6 +39,12 @@ defmodule Moby.GameFlow do
   @spec reset_move(GameState.t()) :: GameState.t()
   def reset_move(game) do
     %GameState{game | latest_move: nil, target_player: nil}
+  end
+
+  defp dispatch_move(game) do
+    game
+    |> Moby.Dispatch.move()
+    |> Victory.check()
   end
 
   @spec update_order(GameState.t()) :: GameState.t()
@@ -64,6 +66,5 @@ defmodule Moby.GameFlow do
     Action.execute_current(game, {Action, :draw_card, [drawn_card]})
     |> Map.put(:deck, new_deck)
     |> reset_move()
-    |> Moby.Countess.check()
   end
 end
