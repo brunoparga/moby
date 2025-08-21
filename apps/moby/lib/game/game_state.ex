@@ -12,7 +12,8 @@ defmodule Moby.GameState do
           removed_card: Types.card(),
           latest_move: nil | Types.move(),
           target_player: nil | Player.t(),
-          face_up_cards: [Types.card()]
+          face_up_cards: [Types.card()],
+          message: String.t()
         }
 
   defstruct players: [],
@@ -21,7 +22,8 @@ defmodule Moby.GameState do
             removed_card: nil,
             latest_move: nil,
             target_player: nil,
-            face_up_cards: []
+            face_up_cards: [],
+            message: ""
 
   @doc """
   Initialize a new game with the given player names.
@@ -37,7 +39,10 @@ defmodule Moby.GameState do
       players: players,
       deck: deck,
       removed_card: removed_card,
-      face_up_cards: face_up_cards
+      face_up_cards: face_up_cards,
+      message: """
+      A game has been created. Waiting for players to join.
+      """
     }
   end
 
