@@ -17,13 +17,17 @@ defmodule Moby.Server do
   end
 
   def handle_call({:join_game, player_name}, {pid, _ref}, players) when length(players) < 4 do
-    new_state = players ++ [{player_name, pid}]
-    players = Enum.map(new_state, fn {name, _pid} -> name end)
-    {:reply, {:ok, players}, new_state}
+    if player_name in Enum.map(players, fn {name, _pid} -> name end) do
+      {:reply, {:error, "No two players with the same name allowed."}, players}
+    else
+      new_state = players ++ [{player_name, pid}]
+      players = Enum.map(new_state, fn {name, _pid} -> name end)
+      {:reply, {:ok, players}, new_state}
+    end
   end
 
   def handle_call({:join_game, _player_name}, _from, players) do
-    {:reply, {:error, "This game is full.", players}, players}
+    {:reply, {:error, "This game is full."}, players}
   end
 
   def handle_call(:start_game, _from, players) do
