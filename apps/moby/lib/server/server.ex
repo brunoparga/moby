@@ -31,9 +31,13 @@ defmodule Moby.Server do
     {:reply, game, game}
   end
 
-  def handle_call({:make_move, move}, _from, game) do
+  def handle_call({:make_move, move}, {pid, _ref}, game) when pid == hd(game.players).pid do
     game = Moby.GameFlow.make_move(game, move)
     {:reply, game, game}
+  end
+
+  def handle_call({:make_move, _move}, _from, game) do
+    {:reply, {:error, "Not your turn."}, game}
   end
 
   def handle_call({:game_state}, _from, game) do
