@@ -63,7 +63,7 @@ defmodule Moby.Validate do
          players: [player | _]
        })
        when played_card in ~w[prince king]a do
-    :countess in player.current_cards
+    :countess not in player.current_cards
   end
 
   defp mandatory_countess?(_game), do: true
