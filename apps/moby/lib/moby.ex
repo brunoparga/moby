@@ -7,26 +7,42 @@ defmodule Moby do
 
   defdelegate test, to: Moby.Test
 
-  @doc """
-  Start a game in the server, return the corresponding pid.
-  The game is started with two default players.
-  """
-  @spec new_game() :: pid
-  def new_game() do
-    new_game(["Joe", "Ann"])
-  end
+  # TODO: fix or remove the manual test
+  def new_game(_arg), do: :noop
 
   @doc """
-  Start a game in the server, return the corresponding pid.
+  Start a game in the server, without any players.
   """
-  @spec new_game(list(String.t())) :: pid
-  def new_game(player_names) when length(player_names) in [2, 3, 4] do
-    {:ok, pid} = Moby.Application.start_game(player_names)
+  @spec create_game() :: pid
+  def create_game() do
+    {:ok, pid} = Moby.Application.create_game()
     pid
   end
 
-  def new_game(_wrong_number_of_players) do
-    raise "Love Letter can only be played with 2, 3 or 4 players"
+  @doc """
+  Create a new Player in the game.
+  """
+  @spec join_game(pid, String.t()) :: :ok | :error
+  def join_game(game_pid, player_name) do
+    GenServer.call(game_pid, {:join_game, player_name})
+    |> case do
+      {:ok, players} ->
+        IO.puts("Players: #{Enum.join(players, ", ")}")
+        :ok
+
+      {:error, message} ->
+        IO.puts(message)
+        :error
+    end
+  end
+
+  @doc """
+  Start a game in the server, using the players that have joined.
+  """
+  @spec start_game(pid) :: :ok
+  def start_game(game_pid) do
+    GenServer.call(game_pid, {:start_game})
+    :ok
   end
 
   @doc """

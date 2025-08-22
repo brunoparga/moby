@@ -24,17 +24,28 @@ defmodule Moby.GameState do
             face_up_cards: []
 
   @doc """
+  Let a player join a game.
+  """
+  @spec add_player(t, String.t(), pid) :: t
+  def add_player(game, player_name, from) do
+    new_player = %Player{name: player_name, pid: from}
+
+    game
+    |> Map.put(:players, game.players ++ [new_player])
+  end
+
+  @doc """
   Initialize a new game with the given player names.
   """
-  @spec initialize(list(String.t())) :: t
-  def initialize(player_names) do
+  @spec initialize(list({String.t(), pid})) :: t
+  def initialize(players0) do
     {removed_card, deck} = deal_card(shuffle_deck())
-    {face_up_cards, deck} = face_up_cards(player_names, deck)
-    {players, deck} = initialize_players(player_names, deck)
-    {players, deck} = deal_first_card(players, deck)
+    {face_up_cards, deck} = face_up_cards(players0, deck)
+    {players1, deck} = initialize_players(players0, deck)
+    {players2, deck} = deal_first_card(players1, deck)
 
     %__MODULE__{
-      players: players,
+      players: players2,
       deck: deck,
       removed_card: removed_card,
       face_up_cards: face_up_cards
@@ -52,21 +63,21 @@ defmodule Moby.GameState do
     |> set_target()
   end
 
-  @spec initialize_players(list(String.t()), list(atom)) :: {list(Player.t()), list(atom)}
-  defp initialize_players(player_names, deck) do
-    Enum.map_reduce(player_names, deck, fn name, deck ->
+  @spec initialize_players(list({String.t(), pid}), list(atom)) :: {list(Player.t()), list(atom)}
+  defp initialize_players(players, deck) do
+    Enum.map_reduce(players, deck, fn {name, pid}, deck ->
       {card, deck} = deal_card(deck)
-      {%Player{name: name, current_cards: [card]}, deck}
+      {%Player{name: name, pid: pid, current_cards: [card]}, deck}
     end)
   end
 
-  @spec face_up_cards(list(String.t()), list(atom)) :: {list(atom), list(atom)}
-  defp face_up_cards(player_names, deck) when length(player_names) == 2 do
+  @spec face_up_cards(list({String.t(), pid}), list(atom)) :: {list(atom), list(atom)}
+  defp face_up_cards(players, deck) when length(players) == 2 do
     [first_card, second_card, third_card | new_deck] = deck
     {[first_card, second_card, third_card], new_deck}
   end
 
-  defp face_up_cards(_too_many_players, deck), do: {[], deck}
+  defp face_up_cards(_too_many_players_for_face_up_cards, deck), do: {[], deck}
 
   @spec deal_first_card(list(Player.t()), list(atom)) :: {list(Player.t()), list(atom)}
   defp deal_first_card(players, deck) do

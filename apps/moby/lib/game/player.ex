@@ -7,6 +7,7 @@ defmodule Moby.Player do
 
   @type t :: %__MODULE__{
           name: String.t(),
+          pid: pid,
           current_cards: [Types.card()],
           played_cards: [Types.card()],
           active?: boolean,
@@ -14,6 +15,7 @@ defmodule Moby.Player do
         }
 
   defstruct name: "",
+            pid: nil,
             current_cards: [],
             played_cards: [],
             active?: true,
