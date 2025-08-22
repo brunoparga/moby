@@ -41,33 +41,24 @@ defmodule Moby do
   """
   @spec start_game(pid) :: :ok
   def start_game(game_pid) do
-    GenServer.call(game_pid, {:start_game})
+    GenServer.call(game_pid, :start_game)
     :ok
   end
 
   @doc """
-  Returns the state of the game.
+  Returns the complete state of the game.
   """
   @spec game_state(pid) :: GameState.t()
   def game_state(game_pid) do
-    GenServer.call(game_pid, {:game_state})
+    GenServer.call(game_pid, :game_state)
   end
 
   @doc """
-  Returns the state of the game for the first player.
+  Returns the state of the game as seen by the player.
   """
-  @spec state_for_player_one(pid) :: Types.discreet_game()
-  def state_for_player_one(game_pid) do
-    GenServer.call(game_pid, {:state_for_player_one})
-  end
-
-  @doc """
-  Returns the state of the game for the given player.
-  TODO: reduce this to arity 1; the GenServer will find the player by their pid.
-  """
-  @spec state_for_player(pid, String.t()) :: Types.discreet_game()
-  def state_for_player(game_pid, player_name) do
-    GenServer.call(game_pid, {:state_for_player, player_name})
+  @spec my_game(pid) :: Types.discreet_game()
+  def my_game(game_pid) do
+    GenServer.call(game_pid, :my_game)
   end
 
   @doc """

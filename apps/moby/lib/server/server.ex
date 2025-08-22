@@ -26,7 +26,7 @@ defmodule Moby.Server do
     {:reply, {:error, "This game is full.", players}, players}
   end
 
-  def handle_call({:start_game}, _from, players) do
+  def handle_call(:start_game, _from, players) do
     game = Moby.GameState.initialize(players)
     {:reply, game, game}
   end
@@ -40,18 +40,12 @@ defmodule Moby.Server do
     {:reply, {:error, "Not your turn."}, game}
   end
 
-  def handle_call({:game_state}, _from, game) do
+  def handle_call(:game_state, _from, game) do
     {:reply, game, game}
   end
 
-  def handle_call({:state_for_player, player_name}, _from, game) do
-    # TODO: get the player from the `from` parameter, so this call
-    # cannot be spoofed by other players.
-    player = Moby.Player.find(game, player_name)
+  def handle_call(:my_game, {pid, _ref}, game) do
+    player = Enum.find(game.players, fn player -> player.pid == pid end)
     {:reply, Moby.Display.state_for_player(game, player), game}
-  end
-
-  def handle_call({:state_for_player_one}, _from, game) do
-    {:reply, Moby.Display.state_for_player(game, hd(game.players)), game}
   end
 end

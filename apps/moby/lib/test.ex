@@ -14,7 +14,7 @@ defmodule Moby.Test do
   end
 
   defp play_game(game) do
-    Moby.state_for_player_one(game)
+    Moby.my_game(game)
     |> IO.inspect()
 
     card = get_card("Choose a card (or 'exit'): ")
