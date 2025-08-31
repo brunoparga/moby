@@ -7,7 +7,7 @@ defmodule Moby.Prince do
     target_player = Moby.Player.find(game, game.latest_move.target)
     target_card = hd(target_player.current_cards)
 
-    Action.execute(game, game.target_player.name, {Action, :play_card, [target_card]})
+    Action.execute(game, game.target_player, {Action, :play_card, [target_card]})
     |> check_deck(target_card)
   end
 
@@ -17,7 +17,7 @@ defmodule Moby.Prince do
       target_card == :princess ->
         game
 
-      length(game.deck) == 0 ->
+      Enum.empty?(game.deck) ->
         resolve_empty_deck(game)
 
       true ->
@@ -27,7 +27,7 @@ defmodule Moby.Prince do
 
   @spec resolve_empty_deck(GameState.t()) :: no_return
   defp resolve_empty_deck(game) do
-    Action.execute(game, game.target_player.name, {Action, :draw_card, [game.removed_card]})
+    Action.execute(game, game.target_player, {Action, :draw_card, [game.removed_card]})
     |> Map.put(:removed_card, nil)
     |> Moby.Victory.round_over()
   end
@@ -36,7 +36,7 @@ defmodule Moby.Prince do
   defp resolve_nonempty_deck(game) do
     [drawn_card | new_deck] = game.deck
 
-    Action.execute(game, game.target_player.name, {Action, :draw_card, [drawn_card]})
+    Action.execute(game, game.target_player, {Action, :draw_card, [drawn_card]})
     |> Map.put(:deck, new_deck)
   end
 end

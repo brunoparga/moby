@@ -12,7 +12,7 @@ defmodule Moby.Baron do
   defp compare([{_self, self_score} | [{target, target_score}]], game) do
     cond do
       self_score > target_score ->
-        Action.execute(game, target.name, {Action, :lose, []})
+        Action.execute(game, target, {Action, :lose, []})
 
       self_score < target_score ->
         Action.execute_current(game, {Action, :lose, []})

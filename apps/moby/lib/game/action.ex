@@ -14,27 +14,26 @@ defmodule Moby.Action do
   """
   @spec execute_current(GameState.t(), mfargs()) :: GameState.t()
   def execute_current(game, mfa) do
-    execute(game, hd(game.players).name, mfa)
+    execute(game, hd(game.players), mfa)
   end
 
   @doc """
   Run the given action on the given player. Return a game.
   """
-  # TODO: DO SOMETHING ABOUT THIS TAKING A NAME OR A PLAYER STRUCT
-  @spec execute(GameState.t(), String.t(), mfargs()) :: GameState.t()
-  def execute(game, player_name, mfa) do
-    updated_players = new_players(game.players, player_name, mfa)
+  @spec execute(GameState.t(), Player.t(), mfargs()) :: GameState.t()
+  def execute(game, focus_player, mfa) do
+    updated_players = new_players(game.players, focus_player, mfa)
     Map.put(game, :players, updated_players)
   end
 
-  @spec new_players([Player.t()], String.t(), mfargs()) :: [Player.t()]
-  defp new_players(players, player_name, mfa) do
-    Enum.map(players, &build_player(&1, player_name, mfa))
+  @spec new_players([Player.t()], Player.t(), mfargs()) :: [Player.t()]
+  defp new_players(players, focus_player, mfa) do
+    Enum.map(players, &build_player(&1, focus_player, mfa))
   end
 
-  @spec build_player(Player.t(), String.t(), mfargs()) :: Player.t()
-  defp build_player(player, player_name, mfa) do
-    if player.name == player_name, do: new_player(player, mfa), else: player
+  @spec build_player(Player.t(), Player.t(), mfargs()) :: Player.t()
+  defp build_player(enum_player, focus_player, mfa) do
+    if enum_player == focus_player, do: new_player(focus_player, mfa), else: enum_player
   end
 
   @spec new_player(Player.t(), mfargs()) :: Player.t()
@@ -42,7 +41,9 @@ defmodule Moby.Action do
     apply(module, function, [player] ++ args)
   end
 
+  # ====================
   # Card-playing actions
+  # ====================
 
   @spec play_card(Player.t(), atom) :: Player.t()
   def play_card(player, :princess), do: lose(player)

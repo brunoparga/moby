@@ -4,7 +4,7 @@ defmodule Moby.Guard do
   @spec play(GameState.t()) :: GameState.t()
   def play(game) do
     if hd(game.target_player.current_cards) == game.latest_move.named_card,
-      do: Action.execute(game, game.target_player.name, {Action, :lose, []}),
+      do: Action.execute(game, game.target_player, {Action, :lose, []}),
       else: game
   end
 end
