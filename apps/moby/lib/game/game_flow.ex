@@ -6,14 +6,6 @@ defmodule Moby.GameFlow do
   alias Moby.{Action, GameState, Types, Victory}
 
   @doc """
-  Sets up the game for the first player to play.
-  """
-  @spec new_game(list(String.t())) :: GameState.t()
-  def new_game(player_names) do
-    GameState.initialize(player_names)
-  end
-
-  @doc """
   Inserts the move into the game state and checks if it's a valid move.
   """
   @spec make_move(GameState.t(), Types.move()) :: GameState.t() | no_return

@@ -2,7 +2,8 @@ defmodule Moby.VictoryTest do
   use ExUnit.Case, async: true
 
   import Moby.Victory
-
+  import Moby.Test.MockPids
+  
   alias Moby.{GameState, Player}
 
   describe "check/1" do
@@ -56,14 +57,14 @@ defmodule Moby.VictoryTest do
 
   describe "won/1" do
     test "exits when called on a game with a winner" do
-      game = GameState.initialize(["Joe", "Ann"])
+      game = GameState.initialize([joe(), ann()])
       game = Map.put(game, :winner, hd(tl(game.players)))
 
       assert catch_exit(won(game) == :normal)
     end
 
     test "fails when called on a game without a winner" do
-      game = GameState.initialize(["Joe", "Ann"])
+      game = GameState.initialize([joe(), ann()])
 
       assert catch_error(won(game))
     end
@@ -71,7 +72,7 @@ defmodule Moby.VictoryTest do
 
   describe "round_over/1" do
     test "finds a winner and exits" do
-      game = GameState.initialize(["Joe", "Ann"])
+      game = GameState.initialize([joe(), ann()])
       [joe, ann] = game.players
 
       discarded_joe =

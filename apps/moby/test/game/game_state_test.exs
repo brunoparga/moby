@@ -2,10 +2,11 @@ defmodule Moby.GameStateTest do
   use ExUnit.Case, async: true
 
   alias Moby.{GameState, Player}
-
+  import Moby.Test.MockPids
+  
   describe "initialize/1" do
     test "starts a new game" do
-      actual = GameState.initialize(["Joe", "Ann"])
+      actual = GameState.initialize([joe(), ann()])
 
       # Yoda assertion used for pattern matching on the random cards that were dealt
       assert %GameState{

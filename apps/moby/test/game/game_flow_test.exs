@@ -2,7 +2,8 @@ defmodule Moby.GameFlowTest do
   use ExUnit.Case, async: true
 
   import Moby.GameFlow
-
+  import Moby.Test.MockPids
+  
   alias Moby.{GameState, Player}
 
   describe "new_game/1" do
@@ -64,7 +65,7 @@ defmodule Moby.GameFlowTest do
 
   describe "reset_move/1" do
     test "clears the game's latest move and target player fields" do
-      game = expected = GameState.initialize(["Joe", "Ann"])
+      game = expected = GameState.initialize([joe(), ann()])
       temp = GameState.set_move(game, %{played_card: :priest, target: "Ann"})
 
       actual = reset_move(temp)

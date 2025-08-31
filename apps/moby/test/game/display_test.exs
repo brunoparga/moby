@@ -2,10 +2,13 @@ defmodule Moby.DisplayTest do
   use ExUnit.Case, async: true
 
   alias Moby.{Display, GameState}
+  import Moby.Test.MockPids
 
   describe "state_for_player/1" do
     test "returns what the current player can see" do
-      game = %GameState{players: [joe, ann]} = GameState.initialize(["Joe", "Ann"])
+      game =
+        %GameState{players: [joe, ann]} =
+        GameState.initialize([joe(), ann()])
 
       expected_ann =
         ann
